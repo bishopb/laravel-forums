@@ -1,0 +1,53 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "20bae7d7a1454a5b6c91cce535846968",
+    "packages": [
+        {
+            "name": "vanilla/vanilla",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vanilla/vanilla.git",
+                "reference": "d4bb1228980eadc29f8aa34e9d6f257687d1e70f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vanilla/vanilla/zipball/d4bb1228980eadc29f8aa34e9d6f257687d1e70f",
+                "reference": "d4bb1228980eadc29f8aa34e9d6f257687d1e70f",
+                "shasum": ""
+            },
+            "require-dev": {
+                "squizlabs/php_codesniffer": "1.5.*"
+            },
+            "type": "library",
+            "license": [
+                "GPLv2"
+            ],
+            "authors": [
+                {
+                    "name": "Todd Burry",
+                    "email": "todd@vanillaforums.com"
+                }
+            ],
+            "description": "Vanilla is a powerfully simple discussion forum you can easily customize to make as unique as your community.",
+            "support": {
+                "source": "https://github.com/vanilla/vanilla/tree/master",
+                "issues": "https://github.com/vanilla/vanilla/issues"
+            },
+            "time": "2014-08-21 17:20:29"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "vanilla/vanilla": 20
+    },
+    "prefer-stable": false,
+    "platform": [],
+    "platform-dev": []
+}

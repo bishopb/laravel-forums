@@ -1,0 +1,15 @@
+{
+    "name": "bishopb/vanilla-for-laravel",
+    "description": "Laravel 4 package of Vanilla Forums",
+    "license": "GPL-2.0",
+    "repositories": [
+        { "type": "vcs", "url": "https://github.com/vanilla/vanilla" }
+    ],
+    "require": {
+        "vanilla/vanilla": "dev-master@dev"
+    },
+    "config": {
+        "preferred-install": "dist"
+    },
+    "minimum-stability": "stable"
+}

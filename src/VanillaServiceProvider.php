@@ -5,14 +5,7 @@ namespace BishopB\VanillaForLaravel;
 class VanillaServiceProvider extends \Illuminate\Support\ServiceProvider
 {
 	/**
-	 * Defer loading until needed.
-	 *
-	 * @var bool
-	 */
-	protected $defer = true;
-
-	/**
-	 * Bootstrap the package events.
+	 * Routing is about to happen, register our route oriented needs.
 	 *
 	 * @return void
 	 */
@@ -25,7 +18,7 @@ class VanillaServiceProvider extends \Illuminate\Support\ServiceProvider
 	}
 
 	/**
-	 * Register the service provider.
+	 * Register the service provider. Keep it fast.
 	 *
 	 * @return void
 	 */
@@ -34,12 +27,10 @@ class VanillaServiceProvider extends \Illuminate\Support\ServiceProvider
 	}
 
 	/**
-	 * Get the services provided by the provider.
+	 * We have views and configuration: can't defer.
 	 *
-	 * @return array
+	 * @var bool
 	 */
-	public function provides()
-	{
-		return [];
-	}
+	protected $defer = false;
+
 }

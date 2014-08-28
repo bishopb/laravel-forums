@@ -8,6 +8,11 @@
     "require": {
         "vanilla/vanilla": "dev-master@dev"
     },
+    "autoload": {
+        "psr-4": {
+            "\\BishopB\VanillaForLaravel\\": "src/"
+        }
+    },
     "config": {
         "preferred-install": "dist"
     },

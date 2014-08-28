@@ -2,10 +2,16 @@
     "name": "bishopb/vanilla-for-laravel",
     "description": "Laravel 4 package of Vanilla Forums",
     "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Bishop Bettini", "email": "bishop@php.net"
+        }
+    ],
     "repositories": [
         { "type": "vcs", "url": "https://github.com/vanilla/vanilla" }
     ],
     "require": {
+        "laravel/framework": "~4.2",
         "vanilla/vanilla": "dev-master@dev"
     },
     "autoload": {

@@ -9,6 +9,7 @@
 $prefix = vfl_get_route_prefix();
 Route::group([ 'prefix' => $prefix ], function () use ($prefix) {
     Route::get('test', function () {
-        return 'Hello';
+        $user = \BishopB\Vfl\User::find(1);
+        dd($user->DateFirstVisit, $user->roles[0]->Name);
     });
 });

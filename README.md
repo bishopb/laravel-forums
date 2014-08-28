@@ -20,7 +20,7 @@ Now, add the package service provider to your `app/config/app.php`:
 ```php
 'providers' => array (
     // ... other providers here
-    'BishopB\VanillaForLaravel\VanillaServiceProvider',
+    'BishopB\Vfl\VflServiceProvider',
 ),
 ```
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace BishopB\VanillaForLaravel;
+namespace BishopB\Vfl;
 
-class VanillaServiceProvider extends \Illuminate\Support\ServiceProvider
+class VflServiceProvider extends \Illuminate\Support\ServiceProvider
 {
 	/**
 	 * Routing is about to happen, register our route oriented needs.

@@ -19,3 +19,14 @@ Your `composer.json` should contain at a minimum:
 }
 ```
 Why this?  Vanilla Forums (on which we obviously depend) isn't in Packagist and, since [Composer doesn't resolve dependencies' repositories](https://getcomposer.org/doc/faqs/why-can't-composer-load-repositories-recursively.md), you have to add the Vanilla Forums repository to your `composer.json` manually.
+
+Usage
+-----
+TODO
+
+Configuration
+-------------
+To override the package behavior, publish the package's configuration files using Artisan:
+`php artisan config:publish bishopb/vanilla-for-laravel`
+
+then, edit `app/config/packages/bishopb/vanilla/*php` to suit.

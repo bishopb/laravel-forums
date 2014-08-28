@@ -11,7 +11,7 @@ class VanillaServiceProvider extends \Illuminate\Support\ServiceProvider
 	 */
 	public function boot()
 	{
-		$this->package('bishopb/vanilla-for-laravel', 'vanilla');
+		$this->package('bishopb/vanilla-for-laravel', 'vfl', __DIR__);
 
 		require_once __DIR__ . '/helpers.php';
 		require_once __DIR__ . '/routes.php';

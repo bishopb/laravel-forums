@@ -3,7 +3,7 @@
 /**
  * Return the prefix to use on all routes in this package.
  */
-function vanilla_get_route_prefix()
+function vfl_get_route_prefix()
 {
-    return \Config::get('vanilla::routes.prefix', 'vanilla');
+    return Config::get('vfl::routes.prefix', 'vfl');
 }

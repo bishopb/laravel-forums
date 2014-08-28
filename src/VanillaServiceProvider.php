@@ -13,8 +13,8 @@ class VanillaServiceProvider extends \Illuminate\Support\ServiceProvider
 	{
 		$this->package('bishopb/vanilla-for-laravel', 'vfl', __DIR__);
 
-		require_once __DIR__ . '/helpers.php';
-		require_once __DIR__ . '/routes.php';
+		require_once __DIR__ . '/boot/helpers.php';
+		require_once __DIR__ . '/boot/routes.php';
 	}
 
 	/**

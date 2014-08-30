@@ -15,6 +15,10 @@ class VflServiceProvider extends \Illuminate\Support\ServiceProvider
 
 		require_once __DIR__ . '/boot/helpers.php';
 		require_once __DIR__ . '/boot/routes.php';
+
+        if (! is_dir($p = \Config::get('vfl::paths.vanilla'))) {
+            throw new VanillaForumsNotFoundException($p);
+        }
 	}
 
 	/**

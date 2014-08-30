@@ -32,6 +32,6 @@ class PassthruController extends \Controller
         }
 
         // run vanilla with the path we got
-        VanillaRunner::view($this->vanilla_path, '/' . implode('/', $segments));
+        VanillaRunner::view($this->vanilla_path, $segments);
     }
 }

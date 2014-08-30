@@ -12,24 +12,10 @@ namespace BishopB\Vfl;
 class VanillaAdapter
 {
     /**
-     * Install the code needed to inject ourselves into Vanilla.
-     */
-    public static function install($path)
-    {
-        $p = $path . '/conf/bootstrap.early.php';
-        if (! file_exists($p)) {
-            file_put_contents($p, '<?php return \BishopB\Vfl\VanillaAdapter::run();');
-        }
-    }
-
-    /**
      * Run the adapter. We expect to do this on every request.
      */
-    public static function run()
+    public function run()
     {
-        // tell Garden we're installed
-        static::set('Garden.Installed', true);
-
         // we've got to have mysql for Vanilla
         if (! \DB::connection() instanceof \Illuminate\Database\MySqlConnection) {
             throw new VanillaForumsRequiresMySQLException();
@@ -37,21 +23,19 @@ class VanillaAdapter
 
         // map the database
         $ldc = \DB::connection()->getConfig();
-        static::set('Database.Host',              $ldc['host']);
-        static::set('Database.Name',              $ldc['database']);
-        static::set('Database.User',              $ldc['username']);
-        static::set('Database.Password',          $ldc['password']);
-        static::set('Database.CharacterEncoding', $ldc['charset']);
-        static::set(
+        $this->set('Database.Host',              $ldc['host']);
+        $this->set('Database.Name',              $ldc['database']);
+        $this->set('Database.User',              $ldc['username']);
+        $this->set('Database.Password',          $ldc['password']);
+        $this->set('Database.CharacterEncoding', $ldc['charset']);
+        $this->set(
             'Database.DatabasePrefix',
             ('' == $ldc['prefix'] ? 'GDN_' : ($ldc['prefix'] . '_GDN_') )
         );
-    }
 
-    // PROTECTED API
-
-    protected static function set($key, $value)
-    {
-        \Gdn::Config()->Set($key, $value, true /*overwrite*/, false /*dont persist*/);
+        // force the webroot to our location
+        $this->set('Garden.Domain',      url('/'));
+        $this->set('Garden.WebRoot',     vfl_get_route_prefix());
+        $this->set('Garden.RewriteUrls', true);
     }
 }

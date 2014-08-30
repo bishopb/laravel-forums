@@ -5,7 +5,7 @@ namespace BishopB\Vfl;
 class VflServiceProvider extends \Illuminate\Support\ServiceProvider
 {
 	/**
-	 * Routing is about to happen, register our route oriented needs.
+	 * Routing is about to happen, define things we'll need for routing.
 	 *
 	 * @return void
 	 */
@@ -15,10 +15,6 @@ class VflServiceProvider extends \Illuminate\Support\ServiceProvider
 
 		require_once __DIR__ . '/boot/helpers.php';
 		require_once __DIR__ . '/boot/routes.php';
-
-        if (! is_dir($p = \Config::get('vfl::paths.vanilla'))) {
-            throw new VanillaForumsNotFoundException($p);
-        }
 	}
 
 	/**
@@ -28,6 +24,20 @@ class VflServiceProvider extends \Illuminate\Support\ServiceProvider
 	 */
 	public function register()
 	{
+        // Laravel is going to define this function with a signature
+        // incompatible with Vanilla.  So we define ourselves one that works
+        // with both.
+        //
+        // Taken from <vanilla>/library/core/functions.general.php
+        // Taken from <laravel>/src/Illuminate/Support/helpers.php
+        function url($path = null, $parameters = [], $secure = null)
+        {
+                return app('url')->to(
+                    vfl_get_route_prefix() . $path,
+                    (is_array($parameters) ? $parameters : []),
+                    $secure
+                );
+        }
 	}
 
 	/**

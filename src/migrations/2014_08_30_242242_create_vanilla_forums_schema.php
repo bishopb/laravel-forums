@@ -11,23 +11,24 @@ class CreateVanillaForumsSchema extends \Illuminate\Database\Migrations\Migratio
 	{
         /* {{{ */ Schema::create('GDN_Activity', function (Blueprint $t) {
             $t->increments('ActivityID');
+
             $t->integer   ('ActivityTypeID');
-            $t->integer   ('NotifyUserID')->default(0);
-            $t->integer   ('ActivityUserID')->nullable()->default(null);
-            $t->integer   ('RegardingUserID')->nullable()->default(null);
-            $t->string    ('Photo', 255)->nullable()->default(null);
+            $t->integer   ('NotifyUserID')                   ->default(0);
+            $t->integer   ('ActivityUserID')     ->nullable()->default(null);
+            $t->integer   ('RegardingUserID')    ->nullable()->default(null);
+            $t->string    ('Photo', 255)         ->nullable()->default(null);
             $t->string    ('HeadlineFormat', 255)->nullable()->default(null);
-            $t->text      ('Story')->nullable();
-            $t->string    ('Format', 10)->nullable()->default(null);
-            $t->string    ('Route', 255)->nullable()->default(null);
-            $t->string    ('RecordType', 20)->nullable()->default(null);
-            $t->integer   ('RecordID')->nullable()->default(null);
-            $t->integer   ('InsertUserID')->nullable()->default(null);
+            $t->text      ('Story')              ->nullable();
+            $t->string    ('Format', 10)         ->nullable()->default(null);
+            $t->string    ('Route', 255)         ->nullable()->default(null);
+            $t->string    ('RecordType', 20)     ->nullable()->default(null);
+            $t->integer   ('RecordID')           ->nullable()->default(null);
+            $t->integer   ('InsertUserID')       ->nullable()->default(null);
             $t->date      ('DateInserted');
             $t->string    ('InsertIPAddress', 15)->nullable()->default(null);
-            $t->date      ('DateUpdated')->nullable()->default(null);
-            $t->integer   ('Notified')->default(0);
-            $t->integer   ('Emailed')->default(0);
+            $t->date      ('DateUpdated')        ->nullable()->default(null);
+            $t->integer   ('Notified')                       ->default(0);
+            $t->integer   ('Emailed')                        ->default(0);
             $t->text      ('Data');
 
             $t->index     (['NotifyUserID', 'Notified']);
@@ -39,6 +40,7 @@ class CreateVanillaForumsSchema extends \Illuminate\Database\Migrations\Migratio
         }); /* }}} */
         /* {{{ */ Schema::create('GDN_ActivityComment', function (Blueprint $t) {
             $t->increments('ActivityCommentID');
+
             $t->integer   ('ActivityID');
             $t->text      ('Body');
             $t->string    ('Format', 20);
@@ -51,258 +53,91 @@ class CreateVanillaForumsSchema extends \Illuminate\Database\Migrations\Migratio
         /* {{{ */ Schema::create('GDN_ActivityType', function (Blueprint $t) {
             $t->increments('ActivityTypeID');
             $t->string    ('Name', 20);
-            $t->integer   ('AllowComments')->default(0);
-            $t->integer   ('ShowIcon')->default(0);
-            $t->string    ('ProfileHeadline', 255)->default(null);
-            $t->string    ('FullHeadline', 255)->default(null);
-            $t->string    ('RouteCode', 255)->default(null);
-            $t->integer   ('Notify')->default(0);
-            $t->integer   ('Public')->default(1);
-        });
-
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'SignIn',
-            'ProfileHeadline' => '%1$s signed in.',
-            'FullHeadline' => '%1$s signed in.'
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Join',
-            'AllowComments' => 1,
-            'ProfileHeadline' => '%1$s joined.',
-            'FullHeadline' => '%1$s joined.'
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'JoinInvite',
-            'AllowComments' => 1,
-            'ProfileHeadline' => '%1$s accepted %4$s invitation for membership.',
-            'FullHeadline' => '%1$s accepted %4$s invitation for membership.',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'JoinApproved',
-            'AllowComments' => 1,
-            'ProfileHeadline' => '%1$s approved %4$s membership application.',
-            'FullHeadline' => '%1$s approved %4$s membership application.',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'JoinCreated',
-            'AllowComments' => 1,
-            'ProfileHeadline' => '%1$s created an account for %3$s.',
-            'FullHeadline' => '%1$s created an account for %3$s.',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'AboutUpdate',
-            'AllowComments' => 1,
-            'ProfileHeadline' => '%1$s updated %6$s profile.',
-            'FullHeadline' => '%1$s updated %6$s profile.',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'WallComment',
-            'AllowComments' => 1,
-            'ShowIcon' => 1,
-            'ProfileHeadline' => '%1$s wrote:',
-            'FullHeadline' => '%1$s wrote on %4$s %5$s.',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'PictureChange',
-            'AllowComments' => 1,
-            'ProfileHeadline' => '%1$s changed %6$s profile picture.',
-            'FullHeadline' => '%1$s changed %6$s profile picture.',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'RoleChange',
-            'AllowComments' => 1,
-            'ProfileHeadline' => '%1$s changed %4$s permissions.',
-            'FullHeadline' => '%1$s changed %4$s permissions.',
-            'Notify' => 1,
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'ActivityComment',
-            'ShowIcon' => 1,
-            'ProfileHeadline' => '%1$s',
-            'FullHeadline' => '%1$s comentd on %4$s %8$s.',
-            'RouteCode' => 'activity',
-            'Notify' => 1,
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Import',
-            'ProfileHeadline' => '%1$s imported data.',
-            'FullHeadline' => '%1$s imported data.',
-            'Notify' => 1,
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Banned',
-            'ProfileHeadline' => '%1$s banned %3$s.',
-            'FullHeadline' => '%1$s banned %3$s.',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Unbanned',
-            'ProfileHeadline' => '%1$s un-banned %3$s.',
-            'FullHeadline' => '%1$s un-banned %3$s.',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Applicant',
-            'ProfileHeadline' => '%1$s applied for membership.',
-            'FullHeadline' => '%1$s applied for membership.',
-            'Notify' => 1,
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'WallPost',
-            'AllowComments' => 1,
-            'ShowIcon' => 1,
-            'ProfileHeadline' => '%1$s wrote:',
-            'FullHeadline' => '%1$s wrote on %2$s %5$s.',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Default',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Registration',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Status',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Ban',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'ConversationMessage',
-            'ProfileHeadline' => '%1$s sent you a %8$s.',
-            'FullHeadline' => '%1$s sent you a %8$s.',
-            'Notify' => 1,
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'AddedToConversation',
-            'ProfileHeadline' => '%1$s added %3$s to a %8$s.',
-            'FullHeadline' => '%1$s added %3$s to a %8$s.',
-            'RouteCode' => 'conversation',
-            'Notify' => 1,
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'NewDiscussion',
-            'ProfileHeadline' => '%1$s started a %8$s.',
-            'FullHeadline' => '%1$s started a %8$s.',
-            'RouteCode' => 'discussion',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'NewComment',
-            'ProfileHeadline' => '%1$s commented on a discussion.',
-            'FullHeadline' => '%1$s commented on a discussion.',
-            'RouteCode' => 'discussion',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'DiscussionComment',
-            'ProfileHeadline' => '%1$s commented on %4$s %8$s.',
-            'FullHeadline' => '%1$s commented on %4$s %8$s.',
-            'RouteCode' => 'discussion',
-            'Notify' => '1',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'DiscussionMention',
-            'ProfileHeadline' => '%1$s mentioned %3$s in a %8$s.',
-            'FullHeadline' => '%1$s mentioned %3$s in a %8$s.',
-            'RouteCode' => 'discussion',
-            'Notify' => '1',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'CommentMention',
-            'ProfileHeadline' => '%1$s mentioned %3$s in a %8$s.',
-            'FullHeadline' => '%1$s mentioned %3$s in a %8$s.',
-            'RouteCode' => 'comment',
-            'Notify' => '1',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'BookmarkComment',
-            'ProfileHeadline' => '%1$s commented on your %8$s.',
-            'FullHeadline' => '%1$s commented on your %8$s.',
-            'RouteCode' => 'bookmarked discussion',
-            'Notify' => '1',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Discussion',
-        ]);
-        \BishopB\Vfl\ActivityType::create([
-            'Name' => 'Comment',
-        ]); /* }}} */
+            $t->integer   ('AllowComments')                   ->default(0);
+            $t->integer   ('ShowIcon')                        ->default(0);
+            $t->string    ('ProfileHeadline', 255)->nullable()->default(null);
+            $t->string    ('FullHeadline', 255)   ->nullable()->default(null);
+            $t->string    ('RouteCode', 255)      ->nullable()->default(null);
+            $t->integer   ('Notify')                          ->default(0);
+            $t->integer   ('Public')                          ->default(1);
+        }); /* }}} */
         /* {{{ */ Schema::create('GDN_AnalyticsLocal', function (Blueprint $t) {
             $t->string ('TimeSlot', 8);
-            $t->integer('Views')->nullable()->default(null);
+            $t->integer('Views')     ->nullable()->default(null);
             $t->integer('EmbedViews')->nullable()->default(null);
 
             $t->unique ('TimeSlot');
         }); /* }}} */
+        /* {{{ */ Schema::create('GDN_Attachment', function (Blueprint $t) {
+            $t->increments('AttachmentID');
+            $t->string    ('Type', 64);
+            $t->string    ('ForeignID', 50);
+            $t->integer   ('ForeignUserID');
+            $t->string    ('Source', 64);
+            $t->string    ('SourceID', 32);
+            $t->string    ('SourceURL', 255);
+            $t->text      ('Attributes');
+            $t->date      ('DateInserted');
+            $t->integer   ('InsertUserID');
+            $t->string    ('InsertIPAddress', 64);
+            $t->date      ('DateUpdated')        ->nullable()->default(null);
+            $t->integer   ('UpdateUserID')       ->nullable()->default(null);
+            $t->string    ('UpdateIPAddress', 15)->nullable()->default(null);
 
-CREATE TABLE `GDN_Attachment` (
-  `AttachmentID` int(11) NOT NULL AUTO_INCREMENT,
-  `Type` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `ForeignID` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `ForeignUserID` int(11) NOT NULL,
-  `Source` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `SourceID` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `SourceURL` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `Attributes` text COLLATE utf8_unicode_ci,
-  `DateInserted` datetime NOT NULL,
-  `InsertUserID` int(11) NOT NULL,
-  `InsertIPAddress` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `DateUpdated` datetime DEFAULT NULL,
-  `UpdateUserID` int(11) DEFAULT NULL,
-  `UpdateIPAddress` varchar(15) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`AttachmentID`),
-  KEY `IX_Attachment_ForeignID` (`ForeignID`),
-  KEY `FK_Attachment_ForeignUserID` (`ForeignUserID`),
-  KEY `FK_Attachment_InsertUserID` (`InsertUserID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `GDN_Ban` (
-  `BanID` int(11) NOT NULL AUTO_INCREMENT,
-  `BanType` enum('IPAddress','Name','Email') COLLATE utf8_unicode_ci NOT NULL,
-  `BanValue` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `Notes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `CountUsers` int(10) unsigned NOT NULL DEFAULT '0',
-  `CountBlockedRegistrations` int(10) unsigned NOT NULL DEFAULT '0',
-  `InsertUserID` int(11) NOT NULL,
-  `DateInserted` datetime NOT NULL,
-  PRIMARY KEY (`BanID`),
-  UNIQUE KEY `UX_Ban` (`BanType`,`BanValue`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `GDN_Category` (
-  `CategoryID` int(11) NOT NULL AUTO_INCREMENT,
-  `ParentCategoryID` int(11) DEFAULT NULL,
-  `TreeLeft` int(11) DEFAULT NULL,
-  `TreeRight` int(11) DEFAULT NULL,
-  `Depth` int(11) DEFAULT NULL,
-  `CountDiscussions` int(11) NOT NULL DEFAULT '0',
-  `CountComments` int(11) NOT NULL DEFAULT '0',
-  `DateMarkedRead` datetime DEFAULT NULL,
-  `AllowDiscussions` tinyint(4) NOT NULL DEFAULT '1',
-  `Archived` tinyint(4) NOT NULL DEFAULT '0',
-  `Name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `UrlCode` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `Description` varchar(500) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `Sort` int(11) DEFAULT NULL,
-  `CssClass` varchar(50) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `Photo` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `PermissionCategoryID` int(11) NOT NULL DEFAULT '-1',
-  `PointsCategoryID` int(11) NOT NULL DEFAULT '0',
-  `HideAllDiscussions` tinyint(4) NOT NULL DEFAULT '0',
-  `DisplayAs` enum('Categories','Discussions','Default') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Default',
-  `InsertUserID` int(11) NOT NULL,
-  `UpdateUserID` int(11) DEFAULT NULL,
-  `DateInserted` datetime NOT NULL,
-  `DateUpdated` datetime NOT NULL,
-  `LastCommentID` int(11) DEFAULT NULL,
-  `LastDiscussionID` int(11) DEFAULT NULL,
-  `LastDateInserted` datetime DEFAULT NULL,
-  `AllowedDiscussionTypes` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `DefaultDiscussionType` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`CategoryID`),
-  KEY `FK_Category_InsertUserID` (`InsertUserID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+            $t->index     ('ForeignID');
+            $t->foreign   ('ForeignUserID')->references(FIXME)->on(FIXME);
+            $t->foreign   ('InsertUserID')->references(FIXME)->on(FIXME);
+        }); /* }}} */
+        /* {{{ */ Schema::create('GDN_Ban', function (Blueprint $t) {
+            $t->increments('BanID');
+            $t->enum      ('BanType', ['IPAddress', 'Name', 'Email');
+            $t->string    ('BanValue', 50);
+            $t->string    ('Notes', 255)               ->nullable()->default(null);
+            $t->integer   ('CountUsers')                           ->default(0);
+            $t->integer   ('CountBlockedRegistrations')            ->default(0);
+            $t->integer   ('InsertUserID');
+            $t->date      ('DateInserted');
+
+            $t->unique    (['BanType', 'BanValue']);
+        }); /* }}} */
+        /* {{{ */ Schema::create('GDN_Category', function (Blueprint $t) {
+            $t->increments('CategoryID');
+
+            $t->integer   ('ParentCategoryID')           ->nullable()->default(null);
+            $t->integer   ('TreeLeft')                   ->nullable()->default(null);
+            $t->integer   ('TreeRight')                  ->nullable()->default(null);
+            $t->integer   ('Depth')                      ->nullable()->default(null);
+            $t->integer   ('CountDiscussions')                       ->default(0);
+            $t->integer   ('CountComments')                          ->default(0);
+            $t->date      ('DateMarkedRead')             ->nullable()->default(null);
+            $t->integer   ('AllowDiscussions')                       ->default(1);
+            $t->integer   ('Archived')                               ->default(0);
+            $t->string    ('Name', 255);
+            $t->string    ('UrlCode', 255)               ->nullable()->default(null);
+            $t->string    ('Description', 500)           ->nullable()->default(null);
+            $t->integer   ('Sort')                       ->nullable()->default(null);
+            $t->string    ('CssClass', 50)               ->nullable()->default(null);
+            $t->string    ('Photo', 255)                 ->nullable()->default(null);
+            $t->integer   ('PermissionCategoryID')                   ->default(-1);
+            $t->integer   ('PointsCategoryID')                       ->default(0);
+            $t->integer   ('HideAllDiscussions')                     ->default(0);
+            $t->enum      (
+                'DisplayAs',
+                ['Categories', 'Discussions', 'Default']
+            )                                                        ->default('Default');
+            $t->integer   ('InsertUserID');
+            $t->integer   ('UpdateUserID')               ->nullable()->default(null);
+            $t->date      ('DateInserted');
+            $t->date      ('DateUpdated');
+            $t->integer   ('LastCommentID')              ->nullable()->default(null);
+            $t->integer   ('LastDiscussionID')           ->nullable()->default(null);
+            $t->date      ('LastDateInserted')           ->nullable()->default(null);
+            $t->string    ('AllowedDiscussionTypes', 255)->nullable()->default(null);
+            $t->string    ('DefaultDiscussionType', 10)  ->nullable()->default(null);
+
+            $t->foreign   ('InsertUserID')->references(FIXME)->on(FIXME);
+        }); /* }}} */
+
 INSERT INTO `GDN_Category` VALUES (-1,NULL,1,4,NULL,0,0,NULL,1,0,'Root','root','Root of category tree. Users should never see this.',NULL,NULL,NULL,-1,0,0,'Default',1,1,'2014-09-23 01:07:09','2014-09-23 01:07:09',NULL,NULL,NULL,NULL,NULL),(1,-1,2,3,NULL,1,1,NULL,1,0,'General','general','General discussions',NULL,NULL,NULL,-1,0,0,'Default',1,1,'2014-09-23 01:07:09','2014-09-23 01:07:09',1,1,NULL,NULL,NULL);
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;

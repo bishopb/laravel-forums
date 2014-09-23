@@ -3,9 +3,9 @@
 namespace BishopB\Vfl;
 
 /**
- * Provides a mechanism to run bootstrapped Vanilla.
+ * Provides a mechanism to run Vanilla inside of Laravel.
  */
-class VanillaRunner
+class VanillaRunner extends AbstractVanillaService
 {
     /**
      * Are we inside of ::view()?
@@ -21,21 +21,6 @@ class VanillaRunner
      */
     public static function view($path_to_vanilla, $segments)
     {
-        // vanilla doesn't pass E_STRICT
-        error_reporting(
-            E_ERROR|E_PARSE|E_CORE_ERROR|
-            E_COMPILE_ERROR|E_USER_ERROR|E_RECOVERABLE_ERROR
-        );
-
-        // Define the constants we need to get going.
-        define('APPLICATION', 'Vanilla');
-        define('APPLICATION_VERSION', '2.2.16');
-        define('DS', '/');
-        define('PATH_ROOT', $path_to_vanilla);
-
-        // Include the bootstrap to configure the framework.
-        require_once(PATH_ROOT.'/bootstrap.php');
-
         // Create and configure the dispatcher.
         $Dispatcher = \Gdn::Dispatcher();
 

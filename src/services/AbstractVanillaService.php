@@ -16,7 +16,7 @@ abstract class AbstractVanillaService
     }
 
     /**
-     * Set a value into the Vanilla configuration.
+     * Set a value into the Vanilla configuration
      */
     public function set($key, $value)
     {
@@ -24,7 +24,7 @@ abstract class AbstractVanillaService
     }
 
     /**
-     * Get a value from the Vanilla configuration.
+     * Get a value from the Vanilla configuration
      */
     public function get($key)
     {

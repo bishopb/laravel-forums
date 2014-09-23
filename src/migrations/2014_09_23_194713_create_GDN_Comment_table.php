@@ -19,7 +19,7 @@ class CreateGDNCommentTable extends Migration {
 			$table->integer('InsertUserID')->nullable()->index('FK_Comment_InsertUserID');
 			$table->integer('UpdateUserID')->nullable();
 			$table->integer('DeleteUserID')->nullable();
-			$table->text('Body')->index('TX_Comment');
+			$table->text('Body');
 			$table->string('Format', 20)->nullable();
 			$table->dateTime('DateInserted')->nullable()->index('IX_Comment_DateInserted');
 			$table->dateTime('DateDeleted')->nullable();
@@ -31,6 +31,11 @@ class CreateGDNCommentTable extends Migration {
 			$table->text('Attributes')->nullable();
 			$table->index(['DiscussionID','DateInserted'], 'IX_Comment_1');
 		});
+
+        $grammar = Schema::getConnection()->getSchemaGrammar();
+        if ($grammar instanceof \Illuminate\Database\Schema\Grammars\MySqlGrammar) {
+            DB::statement('ALTER TABLE `GDN_Comment` ADD FULLTEXT search(Body)');
+        }
 	}
 
 
@@ -41,6 +46,12 @@ class CreateGDNCommentTable extends Migration {
 	 */
 	public function down()
 	{
+        $grammar = Schema::getConnection()->getSchemaGrammar();
+        if ($grammar instanceof \Illuminate\Database\Schema\Grammars\MySqlGrammar) {
+            Schema::table('GDN_Comment', function($table) {
+                $table->dropIndex('search');
+            });
+        }
 		Schema::drop('GDN_Comment');
 	}
 

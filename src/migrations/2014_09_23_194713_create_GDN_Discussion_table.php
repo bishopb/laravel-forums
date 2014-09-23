@@ -43,8 +43,12 @@ class CreateGDNDiscussionTable extends Migration {
 			$table->integer('RegardingID')->nullable()->index('IX_Discussion_RegardingID');
 			$table->index(['CategoryID','DateLastComment'], 'IX_Discussion_CategoryPages');
 			$table->index(['CategoryID','DateInserted'], 'IX_Discussion_CategoryInserted');
-			$table->index(['Name','Body'], 'TX_Discussion');
 		});
+
+        $grammar = Schema::getConnection()->getSchemaGrammar();
+        if ($grammar instanceof \Illuminate\Database\Schema\Grammars\MySqlGrammar) {
+            DB::statement('ALTER TABLE `GDN_Discussion` ADD FULLTEXT search(Name,Body)');
+        }
 	}
 
 
@@ -55,6 +59,13 @@ class CreateGDNDiscussionTable extends Migration {
 	 */
 	public function down()
 	{
+        $grammar = Schema::getConnection()->getSchemaGrammar();
+        if ($grammar instanceof \Illuminate\Database\Schema\Grammars\MySqlGrammar) {
+            Schema::table('GDN_Discussion', function($table) {
+                $table->dropIndex('search');
+            });
+        }
+
 		Schema::drop('GDN_Discussion');
 	}
 

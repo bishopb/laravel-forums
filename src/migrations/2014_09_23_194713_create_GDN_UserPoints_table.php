@@ -20,7 +20,7 @@ class CreateGDNUserPointsTable extends Migration {
 			$table->integer('CategoryID')->default(0);
 			$table->integer('UserID');
 			$table->integer('Points')->default(0);
-			$table->primary(['SlotType','TimeSlot','Source','CategoryID','UserID']);
+			$table->primary(['SlotType','TimeSlot','Source','CategoryID','UserID'], 'composite');
 		});
 	}
 

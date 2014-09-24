@@ -12,7 +12,9 @@
     ],
     "require": {
         "laravel/framework": "~4.2",
-        "vanilla/vanilla": "dev-master@dev"
+        "vanilla/vanilla": "dev-master@dev",
+        "watson/validating": "0.10.*",
+        "felixkiss/uniquewith-validator": "1.1.*"
     },
     "autoload": {
         "psr-4": {

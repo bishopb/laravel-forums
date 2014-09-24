@@ -19,11 +19,11 @@ class CreateGDNActivityTable extends Migration {
 			$table->integer('NotifyUserID')->default(0);
 			$table->integer('ActivityUserID')->nullable();
 			$table->integer('RegardingUserID')->nullable();
-			$table->string('Photo')->nullable();
-			$table->string('HeadlineFormat')->nullable();
+			$table->string('Photo', 255)->nullable();
+			$table->string('HeadlineFormat', 255)->nullable();
 			$table->text('Story')->nullable();
 			$table->string('Format', 10)->nullable();
-			$table->string('Route')->nullable();
+			$table->string('Route', 255)->nullable();
 			$table->string('RecordType', 20)->nullable();
 			$table->integer('RecordID')->nullable();
 			$table->integer('InsertUserID')->nullable()->index('FK_Activity_InsertUserID');

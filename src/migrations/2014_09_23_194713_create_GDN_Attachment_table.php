@@ -20,7 +20,7 @@ class CreateGDNAttachmentTable extends Migration {
 			$table->integer('ForeignUserID')->index('FK_Attachment_ForeignUserID');
 			$table->string('Source', 64);
 			$table->string('SourceID', 32);
-			$table->string('SourceURL');
+			$table->string('SourceURL', 255);
 			$table->text('Attributes')->nullable();
 			$table->dateTime('DateInserted');
 			$table->integer('InsertUserID')->index('FK_Attachment_InsertUserID');

@@ -24,12 +24,12 @@ class CreateGDNCategoryTable extends Migration {
 			$table->dateTime('DateMarkedRead')->nullable();
 			$table->boolean('AllowDiscussions')->default(1);
 			$table->boolean('Archived')->default(0);
-			$table->string('Name');
-			$table->string('UrlCode')->nullable();
+			$table->string('Name', 255);
+			$table->string('UrlCode', 255)->nullable();
 			$table->string('Description', 500)->nullable();
 			$table->integer('Sort')->nullable();
 			$table->string('CssClass', 50)->nullable();
-			$table->string('Photo')->nullable();
+			$table->string('Photo', 255)->nullable();
 			$table->integer('PermissionCategoryID')->default(-1);
 			$table->integer('PointsCategoryID')->default(0);
 			$table->boolean('HideAllDiscussions')->default(0);
@@ -41,7 +41,7 @@ class CreateGDNCategoryTable extends Migration {
 			$table->integer('LastCommentID')->nullable();
 			$table->integer('LastDiscussionID')->nullable();
 			$table->dateTime('LastDateInserted')->nullable();
-			$table->string('AllowedDiscussionTypes')->nullable();
+			$table->string('AllowedDiscussionTypes', 255)->nullable();
 			$table->string('DefaultDiscussionType', 10)->nullable();
 		});
 	}

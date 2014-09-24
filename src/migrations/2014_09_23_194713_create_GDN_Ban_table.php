@@ -17,7 +17,7 @@ class CreateGDNBanTable extends Migration {
 			$table->integer('BanID', true);
 			$table->enum('BanType', array('IPAddress','Name','Email'));
 			$table->string('BanValue', 50);
-			$table->string('Notes')->nullable();
+			$table->string('Notes', 255)->nullable();
 			$table->integer('CountUsers')->unsigned()->default(0);
 			$table->integer('CountBlockedRegistrations')->unsigned()->default(0);
 			$table->integer('InsertUserID');

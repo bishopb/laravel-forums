@@ -18,7 +18,7 @@ class CreateGDNConversationTable extends Migration {
 			$table->string('Type', 10)->nullable()->index('IX_Conversation_Type');
 			$table->string('ForeignID', 40)->nullable();
 			$table->string('Subject', 100)->nullable();
-			$table->string('Contributors');
+			$table->string('Contributors', 255);
 			$table->integer('FirstMessageID')->nullable()->index('FK_Conversation_FirstMessageID');
 			$table->integer('InsertUserID')->index('FK_Conversation_InsertUserID');
 			$table->dateTime('DateInserted')->nullable()->index('FK_Conversation_DateInserted');

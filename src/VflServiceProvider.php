@@ -24,6 +24,10 @@ class VflServiceProvider extends \Illuminate\Support\ServiceProvider
 	 */
 	public function register()
 	{
+        $this->app->register(
+            'Felixkiss\UniqueWithValidator\UniqueWithValidatorServiceProvider'
+        );
+
         // Laravel is going to define this function with a signature
         // incompatible with Vanilla.  So we define ourselves one that works
         // with both.
@@ -46,5 +50,4 @@ class VflServiceProvider extends \Illuminate\Support\ServiceProvider
 	 * @var bool
 	 */
 	protected $defer = false;
-
 }

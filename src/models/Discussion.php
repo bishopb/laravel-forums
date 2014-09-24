@@ -25,7 +25,7 @@ class Discussion extends BaseModel
         'LastCommentUserID' => 'exists:GDN_User,UserID',
         'Score'             => 'numeric',
         // 'Attributes'        => none,
-        'RegardingID'       => 'integer',
+        'RegardingID'       => 'exists:GDN_Regarding,RegardingID',
     ];
 
     // auditing
@@ -80,6 +80,13 @@ class Discussion extends BaseModel
     {
         return $this->hasOne(
             '\BishopB\Vfl\User', 'UserID', 'LastCommentUserID'
+        );
+    }
+
+    public function regarding()
+    {
+        return $this->hasOne(
+            '\BishopB\Vfl\Regarding', 'RegardingID', 'RegardingID'
         );
     }
 }

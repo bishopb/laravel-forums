@@ -14,7 +14,7 @@ class Conversation extends BaseModel
         'CountMessages'     => 'integer|min:0',
         'CountParticipants' => 'integer|min:0',
         'LastMessageID'     => 'exists:GDN_ConversationMessage,MessageID',
-        'RegardingID'       => 'integer',
+        'RegardingID'       => 'exists:GDN_Regarding,RegardingID',
     ];
 
     // auditing
@@ -44,17 +44,24 @@ class Conversation extends BaseModel
         );
     }
 
-    public function message_first()
+    public function first_message()
     {
         return $this->hasOne(
             '\BishopB\Vfl\ConversationMessage', 'MessageID', 'FirstMessageID'
         );
     }
 
-    public function message_last()
+    public function last_message()
     {
         return $this->hasOne(
             '\BishopB\Vfl\ConversationMessage', 'MessageID', 'LastMessageID'
+        );
+    }
+
+    public function regarding()
+    {
+        return $this->hasOne(
+            '\BishopB\Vfl\Regarding', 'RegardingID', 'RegardingID'
         );
     }
 }

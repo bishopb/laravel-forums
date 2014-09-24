@@ -19,9 +19,9 @@ class CreateGDNMessageTable extends Migration {
 			$table->string('Format', 20)->nullable();
 			$table->boolean('AllowDismiss')->default(1);
 			$table->boolean('Enabled')->default(1);
-			$table->string('Application')->nullable();
-			$table->string('Controller')->nullable();
-			$table->string('Method')->nullable();
+			$table->string('Application', 255)->nullable();
+			$table->string('Controller', 255)->nullable();
+			$table->string('Method', 255)->nullable();
 			$table->integer('CategoryID')->nullable();
 			$table->boolean('IncludeSubcategories')->default(0);
 			$table->string('AssetTarget', 20)->nullable();

@@ -18,7 +18,7 @@ class CreateGDNUserTable extends Migration {
 			$table->string('Name', 50)->index('FK_User_Name');
 			$table->binary('Password', 100);
 			$table->string('HashMethod', 10)->nullable();
-			$table->string('Photo')->nullable();
+			$table->string('Photo', 255)->nullable();
 			$table->string('Title', 100)->nullable();
 			$table->string('Location', 100)->nullable();
 			$table->text('About')->nullable();

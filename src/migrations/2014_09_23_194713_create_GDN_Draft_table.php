@@ -20,7 +20,7 @@ class CreateGDNDraftTable extends Migration {
 			$table->integer('InsertUserID')->index('FK_Draft_InsertUserID');
 			$table->integer('UpdateUserID');
 			$table->string('Name', 100)->nullable();
-			$table->string('Tags')->nullable();
+			$table->string('Tags', 255)->nullable();
 			$table->boolean('Closed')->default(0);
 			$table->boolean('Announce')->default(0);
 			$table->boolean('Sink')->default(0);

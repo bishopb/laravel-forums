@@ -15,7 +15,7 @@ class CreateGDNRegardingTable extends Migration {
 		Schema::create('GDN_Regarding', function(Blueprint $table)
 		{
 			$table->integer('RegardingID', true);
-			$table->string('Type')->index('FK_Regarding_Type');
+			$table->string('Type', 255)->index('FK_Regarding_Type');
 			$table->integer('InsertUserID');
 			$table->dateTime('DateInserted');
 			$table->string('ForeignType', 32);
@@ -23,7 +23,7 @@ class CreateGDNRegardingTable extends Migration {
 			$table->text('OriginalContent')->nullable();
 			$table->string('ParentType', 32)->nullable();
 			$table->integer('ParentID')->nullable();
-			$table->string('ForeignURL')->nullable();
+			$table->string('ForeignURL', 255)->nullable();
 			$table->text('Comment');
 			$table->integer('Reports')->nullable();
 		});

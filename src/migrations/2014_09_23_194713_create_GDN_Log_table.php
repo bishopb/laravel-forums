@@ -25,7 +25,7 @@ class CreateGDNLogTable extends Migration {
 			$table->integer('InsertUserID');
 			$table->dateTime('DateInserted');
 			$table->string('InsertIPAddress', 15)->nullable();
-			$table->string('OtherUserIDs')->nullable();
+			$table->string('OtherUserIDs', 255)->nullable();
 			$table->dateTime('DateUpdated')->nullable();
 			$table->integer('ParentRecordID')->nullable()->index('IX_Log_ParentRecordID');
 			$table->integer('CategoryID')->nullable()->index('FK_Log_CategoryID');

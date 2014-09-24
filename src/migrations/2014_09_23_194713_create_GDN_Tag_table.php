@@ -15,8 +15,8 @@ class CreateGDNTagTable extends Migration {
 		Schema::create('GDN_Tag', function(Blueprint $table)
 		{
 			$table->integer('TagID', true);
-			$table->string('Name');
-			$table->string('FullName')->index('IX_Tag_FullName');
+			$table->string('Name', 255);
+			$table->string('FullName', 255)->index('IX_Tag_FullName');
 			$table->string('Type', 20)->default('')->index('IX_Tag_Type');
 			$table->integer('ParentTagID')->nullable()->index('FK_Tag_ParentTagID');
 			$table->integer('InsertUserID')->nullable()->index('FK_Tag_InsertUserID');

@@ -2,16 +2,19 @@
 
 namespace BishopB\Vfl;
 
-class Role extends \Eloquent
+class Role extends BaseModel
 {
-    protected $fillable = [
-        'RoleID', 'Name', 'Description', 'Sort', 'Deletable', 'CanSession', 'PersonalInfo'
+    // validation
+    protected $rules = [
+        'Name'         => 'required|max:100',
+        'Description'  => 'max:500',
+        'Sort'         => 'integer',
+        'Deletable'    => 'boolean',
+        'CanSession'   => 'boolean',
+        'PersonalInfo' => 'boolean',
     ];
+
+    // definitions
     protected $table = 'GDN_Role';
     protected $primaryKey = 'RoleID';
-
-    public function users()
-    {
-        return $this->belongsToMany('\BishopB\Vfl\User', 'GDN_UserRole', 'RoleID', 'UserID');
-    }
 }

@@ -15,8 +15,8 @@ class CreateGDNMediaTable extends Migration {
 		Schema::create('GDN_Media', function(Blueprint $table)
 		{
 			$table->integer('MediaID', true);
-			$table->string('Name');
-			$table->string('Path');
+			$table->string('Name', 255);
+			$table->string('Path', 255);
 			$table->string('Type', 128);
 			$table->integer('Size');
 			$table->integer('InsertUserID');
@@ -27,7 +27,7 @@ class CreateGDNMediaTable extends Migration {
 			$table->smallInteger('ImageHeight')->unsigned()->nullable();
 			$table->smallInteger('ThumbWidth')->unsigned()->nullable();
 			$table->smallInteger('ThumbHeight')->unsigned()->nullable();
-			$table->string('ThumbPath')->nullable();
+			$table->string('ThumbPath', 255)->nullable();
 			$table->index(['ForeignID','ForeignTable'], 'IX_Media_Foreign');
 		});
 	}

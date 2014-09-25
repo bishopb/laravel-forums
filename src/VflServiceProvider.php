@@ -27,21 +27,6 @@ class VflServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->register(
             'Felixkiss\UniqueWithValidator\UniqueWithValidatorServiceProvider'
         );
-
-        // Laravel is going to define this function with a signature
-        // incompatible with Vanilla.  So we define ourselves one that works
-        // with both.
-        //
-        // Taken from <vanilla>/library/core/functions.general.php
-        // Taken from <laravel>/src/Illuminate/Support/helpers.php
-        function url($path = null, $parameters = [], $secure = null)
-        {
-                return app('url')->to(
-                    vfl_get_route_prefix() . $path,
-                    (is_array($parameters) ? $parameters : []),
-                    $secure
-                );
-        }
 	}
 
 	/**

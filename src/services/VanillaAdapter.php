@@ -40,16 +40,31 @@ class VanillaAdapter extends AbstractVanillaService
             );
         }
 
-        $ldc = $connection->getConfig();
-        $this->set('Database.Host',              $ldc['host']);
-        $this->set('Database.Name',              $ldc['database']);
-        $this->set('Database.User',              $ldc['username']);
-        $this->set('Database.Password',          $ldc['password']);
-        $this->set('Database.CharacterEncoding', $ldc['charset']);
-        $this->set(
-            'Database.DatabasePrefix',
-            ('' == $ldc['prefix'] ? 'GDN_' : ($ldc['prefix'] . '_GDN_') )
+        foreach ($this->get_database_settings() as $key => $value) {
+            $this->set($key, $value);
+        }
+    }
+
+    /**
+     * Get the database configuration values as an array of Vanilla key => value.
+     */
+    public function get_database_settings()
+    {
+        $settings = [];
+
+        $c = \DB::connection();
+        $settings['Database.Host']              = $c->getConfig('host');
+        $settings['Database.Name']              = $c->getConfig('database');
+        $settings['Database.User']              = $c->getConfig('username');
+        $settings['Database.Password']          = $c->getConfig('password');
+        $settings['Database.CharacterEncoding'] = $c->getConfig('charset');
+        $settings['Database.DatabasePrefix']    = (
+            '' == $c->getConfig('prefix') ?
+            'GDN_' :
+            ($c->getConfig('prefix') . '_GDN_')
         );
+
+        return $settings;
     }
 
     /**
@@ -57,8 +72,9 @@ class VanillaAdapter extends AbstractVanillaService
      */
     public function adapt_request()
     {
-        $this->set('Garden.Domain',      url('/'));
-        $this->set('Garden.WebRoot',     vfl_get_route_prefix());
-        $this->set('Garden.RewriteUrls', true);
+        \Gdn::FactoryInstall(
+            \Gdn::AliasRequest, '\BishopB\Vfl\GardenRequest',
+            NULL, \Gdn::FactoryRealSingleton, 'Create'
+        );
     }
 }

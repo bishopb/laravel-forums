@@ -13,84 +13,107 @@ class VanillaSetup extends AbstractVanillaService
     public function install()
     {
         // check for prior installs
-        foreach ($this->installed_files() as $file) {
+        foreach ($this->affected_files() as $file) {
             if (file_exists($file)) {
                 throw new VanillaForumsSetupException('Already installed');
             }
         }
 
-        // arrange for Vanilla to call on our code
-        $map = [
-            'early' => '<?php with(new \BishopB\Vfl\VanillaSetup())->once();',
-            'late'  => \BishopB\Vfl\VanillaAdapter::code(),
-        ];
-        foreach ($map as $step => $code) {
-            $path = sprintf(
-                '%s/conf/bootstrap.%s.php', $this->getVanillaPath(), $step
-            );
-            $retc = file_put_contents($path, $code);
-            if (false === $retc || $retc !== strlen($code)) {
-                throw new VanillaForumsSetupException('Could not install file ' . $path);
-            }
-        }
+        // write the static configuration file
+        $this->write_config_file();
 
-        // boot up to get the one-time setup stuff to run
-        $boot = new VanillaBootstrap();
+        // arrange for Vanilla to call on our code at runtime
+        $this->write_file(
+            $this->affected_files()['bootstrap.early'],
+            \BishopB\Vfl\VanillaAdapter::code()
+        );
     }
 
     /**
-     * Unconvince Vanilla it's installed.
+     * Reset Vanilla back to an uninstalled state.
      */
     public function uninstall()
     {
-        foreach ($this->installed_files() as $file) {
-            if (file_exists($p)) {
-                unlink($p);
-            }
+        foreach ($this->affected_files() as $file) {
+            unlink($file);
         }
     }
 
     /**
-     * Code we need to run once in order to get Vanilla setup.
-     *
-     * Refer to Vanilla's SetupController::Configure() for the steps that need
-     * to happen, and that we need to emulate here.
-     *
-     * This stuff needs to run in the context of Vanilla.
+     * Return an array of all files affected by this setup.
      */
-    public function once()
+    public function affected_files()
     {
-        // assert: we are running inside of Vanilla's bootstrap
-        $adapter = new VanillaAdapter();
-        $adapter->adapt_db();
-
-        // get Garden ready
-        \Gdn::FactoryInstall(\Gdn::AliasApplicationManager, 'Gdn_ApplicationManager');
-        \Gdn_Autoloader::Attach(\Gdn_Autoloader::CONTEXT_APPLICATION);
-        \Gdn::FactoryInstall(\Gdn::AliasThemeManager, 'Gdn_ThemeManager');
-        \Gdn::FactoryInstall(\Gdn::AliasPluginManager, 'Gdn_PluginManager');
-
-        // install the schema
-        \Gdn::FactoryInstall(
-            \Gdn::AliasDatabase, 'Gdn_Database', NULL, \Gdn::FactorySingleton, array('Database')
-        );
-        \Gdn::FactoryInstall('MySQLDriver', 'Gdn_MySQLDriver', NULL, \Gdn::FactoryInstance);
-        \Gdn::FactoryInstall('MySQLStructure', 'Gdn_MySQLStructure', NULL, \Gdn::FactoryInstance);
-        require PATH_APPLICATIONS . '/dashboard/settings/structure.php';
-
-        // FIXME: there is more
-
-        // all done with the once stuff, don't do it again
-        unlink($this->getVanillaPath() . '/conf/bootstrap.early.php');
+        $base = $this->get_vanilla_path();
+        return [
+            'config'          => $base . '/conf/config.php',
+            'bootstrap.early' => $base . '/conf/bootstrap.early.php',
+        ];
     }
 
-    // PROTECTED API
-
-    protected function installed_files()
+    /**
+     * Write a basic Vanilla configuration file.
+     */
+    protected function write_config_file()
     {
-        return [
-            $this->getVanillaPath() . '/conf/bootstrap.early.php',
-            $this->getVanillaPath() . '/conf/bootstrap.late.php',
+        $html = '<?php if (!defined("APPLICATION")) exit();' . "\n";
+
+        // start with base settings
+        $settings = [
+            'Conversations.Version' => $this->get_vanilla_version(),
+            'EnabledApplications.Conversations' => 'conversations',
+            'EnabledApplications.Vanilla' => 'vanilla',
+            'EnabledPlugins.HtmLawed' => 'HtmLawed',
+            'Garden.Title' => trans('Vanilla 2 for Laravel 4'),
+            'Garden.Cookie.Salt' => \Config::get('app.key'),
+            'Garden.Cookie.Domain' => '',
+            'Garden.Registration.ConfirmEmail' => true,
+            'Garden.Email.SupportName' => \Config::get('mail.from.name'),
+            'Garden.InputFormatter' => 'Html',
+            'Garden.Version' => $this->get_vanilla_version(),
+            'Garden.RewriteUrls' => false,
+            'Garden.CanProcessImages' => function_exists('gd_info'),
+            'Garden.SystemUserID' => User::firstOrFail()->getKey(),
+            'Garden.Installed' => true,
+            'Routes.DefaultController' => 'discussions',
+            'Vanilla.Version' => $this->get_vanilla_version(),
         ];
+
+        // add in database settings (we've got a helper that does this work
+        // already)
+        $adapter = new VanillaAdapter();
+        $settings += $adapter->get_database_settings();
+
+        // set those into the html
+        foreach ($settings as $key => $value) {
+            $html .= $this->setting($key, $value);
+        }
+
+        // write the file
+        $this->write_file($this->affected_files()['config'], $html);
+    }
+
+    /**
+     * Generate a configuration line for the given dot-notation key and value.
+     */
+    protected function setting($key, $value)
+    {
+        $html = '$Configuration';
+        foreach (explode('.', $key) as $part) {
+            $html .= sprintf('["%s"]', $part);
+        }
+        $html .= sprintf("=%s;\n", var_export($value, true));
+        return $html;
+    }
+
+    /**
+     * Stuff data into a file, with some error checking.
+     */
+    protected function write_file($path, $content)
+    {
+        $retc = file_put_contents($path, $content);
+        if (false === $retc || $retc !== strlen($content)) {
+            throw new VanillaForumsSetupException('Could not install file ' . $path);
+        }
     }
 }

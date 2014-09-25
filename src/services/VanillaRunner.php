@@ -19,8 +19,35 @@ class VanillaRunner extends AbstractVanillaService
      * Emulate a call to index.php?p=$vanilla_module_path
      * Much of this ripped out of Vanilla's index.php
      */
-    public static function view($path_to_vanilla, $segments)
+    public function view($segments)
     {
+        // if the segments point to an extant file, serve it up directly
+        $target = $this->get_vanilla_path() . '/' . implode('/', $segments);
+        if (is_readable($target)) {
+            // TODO: Replace this with a dead simple library
+            // TODO: googling "github php mimetype to file extension returns heavy projects
+            // @see http://stackoverflow.com/questions/19681854
+            switch (pathinfo($target, PATHINFO_EXTENSION)) {
+                case 'js' : $ct = 'text/javascript'; break;
+                case 'css': $ct = 'text/css'; break;
+                case 'png': $ct = 'image/png'; break;
+                case 'jpg': $ct = 'image/jpg'; break;
+                case 'gif': $ct = 'image/gif'; break;
+                default:    $ct = 'text/plain'; break;
+            }
+            header("Content-Type: $ct");
+            readfile($target);
+            return;
+        }
+
+        // otherwise, dispatch into vanilla
+        new VanillaBootstrap();
+
+        // inject our route prefix into the request
+        // Note: I can find no way to configure this....
+        $Request = \Gdn::Request();
+        $Request->WebRoot(vfl_get_route_prefix());
+
         // Create and configure the dispatcher.
         $Dispatcher = \Gdn::Dispatcher();
 
@@ -31,20 +58,5 @@ class VanillaRunner extends AbstractVanillaService
         // Process the request.
         $Dispatcher->Start();
         $Dispatcher->Dispatch(implode('/', $segments));
-
-        /*
-        // doesn't work either
-        $view = sprintf(
-            '%s/applications/%s/views/%s.php',
-            $path_to_vanilla,
-            $segments[0],
-            implode('/', array_slice($segments, 1))
-        );
-        if (is_readable($view)) {
-            @include $view;
-        } else {
-            throw new VanillaForumsContentNotFound(implode('/', $segments));
-        }
-        */
     }
 }

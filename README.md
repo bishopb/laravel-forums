@@ -5,7 +5,7 @@ Laravel 4 package of [Vanilla Forums](https://github.com/vanilla/vanilla).
 
 Installation
 ------------
-First, you need to edit your `composer.json` to include at a minimum:
+Edit your `composer.json` to include:
 ```json
 "repositories": [
     { "type": "vcs", "url": "https://github.com/vanilla/vanilla" }
@@ -14,9 +14,9 @@ First, you need to edit your `composer.json` to include at a minimum:
     "bishopb/vanilla-for-laravel": "dev-master@dev"
 }
 ```
-Now run `composer update`.  If you're wondering *why* you have to add this repository, well Vanilla Forums (on which we obviously depend) isn't in Packagist and, since [Composer doesn't resolve dependencies' repositories](https://getcomposer.org/doc/faqs/why-can't-composer-load-repositories-recursively.md), you have to add the Vanilla Forums repository manually.
+Run `composer update bishopb/vanilla-for-laravel`.  
 
-Now, add the package service provider to your `app/config/app.php`:
+Add the package service provider to your `app/config/app.php`:
 ```php
 'providers' => array (
     // ... other providers here
@@ -24,10 +24,16 @@ Now, add the package service provider to your `app/config/app.php`:
 ),
 ```
 
+Install the migrations: `php artisan vfl:migrate`
+
+Connect Vanilla to Laravel: `php artisan vfl:connect`
+
+Navigate in your app to the `vfl/` route and you will see Vanilla!
 
 Usage
 -----
-TODO
+Vanilla does not have the concept of anonymous forums, so you MUST bind some kind of authentication into it.
+
 
 Configuration
 -------------

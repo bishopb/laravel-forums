@@ -27,6 +27,15 @@ class VflServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->register(
             'Felixkiss\UniqueWithValidator\UniqueWithValidatorServiceProvider'
         );
+
+        $this->app['vfl::commands.migrate'] = $this->app->share(function ($app) {
+            return new VanillaMigrate();
+        });
+        $this->app['vfl::commands.connect'] = $this->app->share(function ($app) {
+            return new VanillaConnect();
+        });
+
+        $this->commands('vfl::commands.migrate', 'vfl::commands.connect');
 	}
 
 	/**

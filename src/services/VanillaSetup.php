@@ -12,15 +12,11 @@ class VanillaSetup extends AbstractVanillaService
      */
     public function install()
     {
-        // check for prior installs
-        foreach ($this->affected_files() as $file) {
-            if (file_exists($file)) {
-                throw new VanillaForumsSetupException('Already installed');
-            }
-        }
-
         // write the static configuration file
         $this->write_config_file();
+
+        // write the static constants file
+        $this->write_constants_file();
 
         // arrange for Vanilla to call on our code at runtime
         $this->write_file(
@@ -46,8 +42,9 @@ class VanillaSetup extends AbstractVanillaService
     {
         $base = $this->get_vanilla_path();
         return [
-            'config'          => $base . '/conf/config.php',
-            'bootstrap.early' => $base . '/conf/bootstrap.early.php',
+            'config'           => $base . '/conf/config.php',
+            'bootstrap.before' => $base . '/conf/bootstrap.before.php',
+            'bootstrap.early'  => $base . '/conf/bootstrap.early.php',
         ];
     }
 
@@ -115,5 +112,24 @@ class VanillaSetup extends AbstractVanillaService
         if (false === $retc || $retc !== strlen($content)) {
             throw new VanillaForumsSetupException('Could not install file ' . $path);
         }
+    }
+
+    /**
+     * Write out the constants.
+     */
+    protected function write_constants_file()
+    {
+        $constants = [
+            'PATH_CACHE' => storage_path() . '/cache',
+            'PATH_THEMES' => dirname(__DIR__) . '/views/themes',
+            'PATH_UPLOADS' => \Config::get('vfl::paths.uploads'),
+        ];
+
+        $text = '<?php' . "\n";
+        foreach ($constants as $key => $val) {
+            $text .= sprintf("define('%s', %s);\n", $key, var_export($val, true));
+        }
+
+        $this->write_file($this->affected_files()['bootstrap.before'], $text);
     }
 }

@@ -22,22 +22,28 @@ class VanillaRunner extends AbstractVanillaService
     public function view($segments)
     {
         // if the segments point to an extant file, serve it up directly
-        $target = $this->get_vanilla_path() . '/' . implode('/', $segments);
-        if (is_readable($target)) {
-            // TODO: Replace this with a dead simple library
-            // TODO: googling "github php mimetype to file extension returns heavy projects
-            // @see http://stackoverflow.com/questions/19681854
-            switch (pathinfo($target, PATHINFO_EXTENSION)) {
-                case 'js' : $ct = 'text/javascript'; break;
-                case 'css': $ct = 'text/css'; break;
-                case 'png': $ct = 'image/png'; break;
-                case 'jpg': $ct = 'image/jpg'; break;
-                case 'gif': $ct = 'image/gif'; break;
-                default:    $ct = 'text/plain'; break;
+        $implode = implode('/', $segments);
+        $targets = [
+            dirname(__DIR__) . '/views/' . $implode,    // a theme file?
+            $this->get_vanilla_path() . '/' . $implode, // a Vanilla resource?
+        ];
+        foreach ($targets as $target) {
+            if (is_readable($target)) {
+                // TODO: Replace this with a dead simple library
+                // TODO: googling "github php mimetype to file extension returns heavy projects
+                // @see http://stackoverflow.com/questions/19681854
+                switch (pathinfo($target, PATHINFO_EXTENSION)) {
+                    case 'js' : $ct = 'text/javascript'; break;
+                    case 'css': $ct = 'text/css'; break;
+                    case 'png': $ct = 'image/png'; break;
+                    case 'jpg': $ct = 'image/jpg'; break;
+                    case 'gif': $ct = 'image/gif'; break;
+                    default:    $ct = 'text/plain'; break;
+                }
+                header("Content-Type: $ct");
+                readfile($target);
+                return;
             }
-            header("Content-Type: $ct");
-            readfile($target);
-            return;
         }
 
         // otherwise, dispatch into vanilla

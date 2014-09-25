@@ -22,13 +22,13 @@ class VanillaBootstrap extends AbstractVanillaService
 
         // Define the constants we need to get going.
         define('APPLICATION',         'Vanilla');
-        define('APPLICATION_VERSION', '2.2.16');
+        define('APPLICATION_VERSION', $this->get_vanilla_version());
         define('DS',                  '/');
         define('PATH_ROOT',           $this->get_vanilla_path());
 
         // Vanilla and Laravel share some common global functions, like `url`
-        // and `asset`.  Laravel's defintion one, so no we need to override
-        // them so as to conform to Vanilla's need
+        // and `asset`.  Laravel's defintion won, so now we need to override
+        // these functions to be compatible with Vanilla.
         \App::bind('url', function()
         {
             return new UrlGenerator(

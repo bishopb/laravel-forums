@@ -14,7 +14,7 @@ class UrlGenerator extends \Illuminate\Routing\UrlGenerator
     function to($path, $parameters = null, $secure = false)
     {
         return parent::to(
-            vfl_get_route_prefix() . $path,
+            vfl_get_route_prefix() . '/' . $path,
             (is_array($parameters) ? $parameters : []),
             $secure
         );

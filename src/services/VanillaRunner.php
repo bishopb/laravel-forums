@@ -43,11 +43,6 @@ class VanillaRunner extends AbstractVanillaService
         // otherwise, dispatch into vanilla
         new VanillaBootstrap();
 
-        // inject our route prefix into the request
-        // Note: I can find no way to configure this....
-        $Request = \Gdn::Request();
-        $Request->WebRoot(vfl_get_route_prefix());
-
         // Create and configure the dispatcher.
         $Dispatcher = \Gdn::Dispatcher();
 

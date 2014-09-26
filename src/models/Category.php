@@ -2,6 +2,9 @@
 
 namespace BishopB\Vfl;
 
+/**
+ * TODO: Implement Nested Set add, move, remove operations.
+ */
 class Category extends BaseModel
 {
     // validation

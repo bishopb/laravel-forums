@@ -22,10 +22,21 @@ class PassthruController extends \Controller
 
     public function index()
     {
+        $user = User::createWithRoles(
+            [ 'Name' => 'Whatever', 'Email' => 'x@example.com', ],
+            [ RoleRepository::member(), RoleRepository::moderator() ]
+        );
+        dd($user, $user->roles);
+
         // get the segments after our route prefix (/foo/bar) and feed into vanilla
         $segments = $this->request->segments();
         if (vfl_get_route_prefix() === head($segments)) {
             array_shift($segments);
+        }
+
+        // use a default if needed
+        if (0 === count($segments)) {
+            $segments = [ 'discussions' ];
         }
 
         // run vanilla with the path we got

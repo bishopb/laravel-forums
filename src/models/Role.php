@@ -17,4 +17,10 @@ class Role extends BaseModel
     // definitions
     protected $table = 'GDN_Role';
     protected $primaryKey = 'RoleID';
+
+    // relationships
+    public function permissions()
+    {
+        return $this->hasMany('\BishopB\Vfl\Permission', 'RoleID', 'RoleID');
+    }
 }

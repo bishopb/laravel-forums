@@ -75,4 +75,20 @@ class User extends BaseModel
             '\BishopB\Vfl\Role', 'GDN_UserRole', 'UserID', 'RoleID'
         );
     }
+
+    // custom
+    /**
+     * Manfacture a user with a particular role(s).
+     */
+    public static function createWithRoles(array $attributes, array $roles)
+    {
+        \DB::beginTransaction();
+        $user = User::create($attributes);
+        foreach ($roles as $role) {
+            $user->roles()->save($role);
+        }
+        \DB::commit();
+
+        return $user;
+    }
 }

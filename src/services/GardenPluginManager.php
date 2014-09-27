@@ -24,7 +24,7 @@ class GardenPluginManager extends \Gdn_PluginManager
         ]);
 
         // log if we want to
-        if (\Config::get('vfl::package.trace-events', false)) {
+        if (\Config::get('vfl::package.trace-include-events', false)) {
             Trace(['EventClassName' => $EventClassName, 'EventName' => $EventName]);
         }
 

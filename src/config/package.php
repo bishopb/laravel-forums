@@ -23,7 +23,13 @@ return [
 
     /**
      * If you would like to see the events that Vanilla's firing, enable
-     * `trace-events`.  This has no effect unless `trace` is on.
+     * `trace-include-events`.  This has no effect unless `trace` is on.
      */
-    'trace-events' => false,
+    'trace-include-events' => false,
+
+    /**
+     * If you would like to see the database queries that Vanilla's making, enable
+     * `trace-include-queries`.  This has no effect unless `trace` is on.
+     */
+    'trace-include-queries' => false,
 ];

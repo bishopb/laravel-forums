@@ -25,6 +25,7 @@ class PassthruController extends \Controller
         if (vfl_get_route_prefix() === head($segments)) {
             array_shift($segments);
         }
+if (\Input::has('p')) dd(\Input::all());
 
         // use a default if needed
         if (0 === count($segments)) {

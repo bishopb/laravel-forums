@@ -46,6 +46,11 @@ class VanillaAdapter
         foreach ($this->get_database_settings() as $key => $value) {
             $this->set($key, $value);
         }
+
+        \Gdn::FactoryInstall(
+            \Gdn::AliasDatabase, '\BishopB\Vfl\GardenDatabase',
+            NULL, \Gdn::FactorySingleton, [ 'Database' ]
+        );
     }
 
     /**

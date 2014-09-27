@@ -228,7 +228,7 @@ class SeedBaseVanillaTables extends Migration
                 'TreeRight' => 3,
                 'Name' => 'General discussions',
                 'UrlCode' => 'general',
-                'Description' => 'General discussions about unimportant stuff.',
+                'Description' => 'Assorted discussions on topics of general interest.',
                 'InsertUserID' => $systemUserId,
                 'UpdateUserID' => $systemUserId,
                 'DateInserted' => $dateInserted,

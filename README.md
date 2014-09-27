@@ -1,4 +1,4 @@
-# Laravel Forms
+# Laravel Forums
 
 A forums package for Laravel 4, built upon the [Vanilla Forums](https://github.com/vanilla/vanilla) engine.
 
@@ -25,10 +25,10 @@ Edit your `composer.json` to include:
     { "type": "vcs", "url": "https://github.com/vanilla/vanilla" }
 ],
 "require": {
-    "bishopb/vanilla-for-laravel": "dev-master@dev"
+    "bishopb/laravel-forums": "dev-master@dev"
 }
 ```
-Run `composer update bishopb/vanilla-for-laravel`.  
+Run `composer update bishopb/laravel-forums`.  
 
 Add the package service provider to your `app/config/app.php`:
 ```php
@@ -128,13 +128,13 @@ Vanilla emits events during its operation, and you can use these events to modif
 ## Troubleshooting
 Things go wrong.  There's a least a way to peek under the hood and see what the Vanilla engine is doing.  Here you go:
 
-  * Publish the package configuration files: `php artisan config:publish bishopb/vanilla-for-laravel`
-  * Edit `app/config/packages/bishopb/vanilla-for-laravel/package.php`
+  * Publish the package configuration files: `php artisan config:publish bishopb/laravel-forums`
+  * Edit `app/config/packages/bishopb/laravel-forums/package.php`
   * Set all these flags to `true`: `trace`, `trace-include-events`, `trace-include-queries`.
   * Check your `app/storage/logs/laravel.log` for details.
 
 ## Frequently Asked Questions
-1. **What does this package provide?**  Simply, forum software for Laravel.  Using the awesome Vanilla Forums engine, your Laravel application can now quickly and easily include fully-function discussion boards.
+1. **What does this package provide?**  Simply, forum software for Laravel.  Using the awesome Vanilla Forums engine, your Laravel application can now quickly and easily include discussion boards.
 2. **Is it free?** Yes, of course.
-3. **Can it do _______**?  If the community edition of Vanilla Forums can do it, this package can do it, but might not currently do it.
+3. **Can it do _______**?  If the community edition of Vanilla Forums can do it, this package can do it, but might not *currently* do it.
 4. **What "gaps" exist between this package and Vanilla Forums?**  This may not be a complete list: plugins.

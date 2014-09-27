@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 class Spammer extends BaseModel
 {
@@ -17,6 +17,6 @@ class Spammer extends BaseModel
     // relationships
     public function user()
     {
-        return $this->hasOne('\BishopB\Vfl\User', 'UserID', 'UserID');
+        return $this->hasOne('\BishopB\Forum\User', 'UserID', 'UserID');
     }
 }

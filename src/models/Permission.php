@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 class Permission extends BaseModel
 {
@@ -21,7 +21,7 @@ class Permission extends BaseModel
     public function role()
     {
         return $this->hasOne(
-            '\BishopB\Vfl\Role', 'RoleID', 'RoleID'
+            '\BishopB\Forum\Role', 'RoleID', 'RoleID'
         );
     }
 

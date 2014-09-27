@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * Occurs when we cannot setup Vanilla Forums.

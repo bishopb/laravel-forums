@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,7 +16,7 @@ class VanillaMigrate extends Command
 	 *
 	 * @var string
 	 */
-	protected $name = 'vfl:migrate';
+	protected $name = 'forum:migrate';
 
 	/**
 	 * The console command description.

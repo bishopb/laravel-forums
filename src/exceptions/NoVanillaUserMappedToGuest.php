@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 class NoVanillaUserMappedToGuest extends \RuntimeException
 {

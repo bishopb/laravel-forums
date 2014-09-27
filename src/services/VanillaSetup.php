@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * Perform the Vanilla setup tasks, just like someone did it manually.
@@ -23,7 +23,7 @@ class VanillaSetup
         // arrange for Vanilla to call on our code at runtime
         $this->write_file(
             $this->affected_files()['bootstrap.early'],
-            \BishopB\Vfl\VanillaAdapter::code()
+            VanillaAdapter::code()
         );
     }
 
@@ -125,7 +125,7 @@ class VanillaSetup
         $constants = [
             'PATH_CACHE' => storage_path() . '/cache',
             'PATH_THEMES' => dirname(__DIR__) . '/views/themes',
-            'PATH_UPLOADS' => \Config::get('vfl::paths.uploads'),
+            'PATH_UPLOADS' => \Config::get('forum::paths.uploads'),
         ];
 
         $text = '<?php' . "\n";

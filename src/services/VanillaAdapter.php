@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * This class adapts the Vanilla Forums early runtime environment to
@@ -18,7 +18,7 @@ class VanillaAdapter
      */
     public static function code()
     {
-        return '<?php with(new \BishopB\Vfl\VanillaAdapter)->run();';
+        return '<?php with(new \BishopB\Forum\VanillaAdapter)->run();';
     }
 
     /**
@@ -48,7 +48,7 @@ class VanillaAdapter
         }
 
         \Gdn::FactoryInstall(
-            \Gdn::AliasDatabase, '\BishopB\Vfl\GardenDatabase',
+            \Gdn::AliasDatabase, '\BishopB\Forum\GardenDatabase',
             NULL, \Gdn::FactorySingleton, [ 'Database' ]
         );
     }
@@ -81,7 +81,7 @@ class VanillaAdapter
     public function adapt_request()
     {
         \Gdn::FactoryInstall(
-            \Gdn::AliasRequest, '\BishopB\Vfl\GardenRequest',
+            \Gdn::AliasRequest, '\BishopB\Forum\GardenRequest',
             NULL, \Gdn::FactoryRealSingleton, 'Create'
         );
     }
@@ -92,7 +92,7 @@ class VanillaAdapter
     public function adapt_pluginmanager()
     {
         \Gdn::FactoryInstall(
-            \Gdn::AliasPluginManager, '\BishopB\Vfl\GardenPluginManager'
+            \Gdn::AliasPluginManager, '\BishopB\Forum\GardenPluginManager'
         );
     }
 }

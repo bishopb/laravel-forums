@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 class Comment extends BaseModel
 {
@@ -30,7 +30,7 @@ class Comment extends BaseModel
     public function discussion()
     {
         return $this->belongsTo(
-            '\BishopB\Vfl\Discussion', 'DiscussionID', 'DiscussionID'
+            '\BishopB\Forum\Discussion', 'DiscussionID', 'DiscussionID'
         );
     }
 }

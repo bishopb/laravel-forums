@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * Provides a mechanism to run Vanilla inside of Laravel.

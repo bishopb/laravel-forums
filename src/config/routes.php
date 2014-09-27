@@ -2,10 +2,10 @@
 
 return [
     /**
-     * @var prefix
+     * @var string prefix
      * All routes exposed in this package lay underneath this prefix.
      * For the list of routes, refer to src/routes.php and the documentation.
-     * As an example, /vfl/list
+     * As an example, /forum/discussions
      */
-    'prefix' => 'vfl',
+    'prefix' => 'forum',
 ];

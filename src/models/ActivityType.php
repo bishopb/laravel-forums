@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 class ActivityType extends BaseModel
 {
@@ -24,7 +24,7 @@ class ActivityType extends BaseModel
     public function activity()
     {
         return $this->belongsTo(
-            '\BishopB\Vfl\Activity', 'ActivityTypeID', 'ActivityTypeID'
+            '\BishopB\Forum\Activity', 'ActivityTypeID', 'ActivityTypeID'
         );
     }
 }

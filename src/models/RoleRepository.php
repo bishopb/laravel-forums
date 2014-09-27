@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * Vanilla defines a finite set of roles. Provide a convenient way to pull

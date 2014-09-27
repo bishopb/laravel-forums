@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * Let's you synchronize Vanilla's user table with your application's user
@@ -18,7 +18,7 @@ class UserMapperSynchronicity extends UserMapperByClosure
     /**
      * @var callable
      * Closure to call to create a guest account. If not set, or if doesn't return
-     * a \BishopB\Vfl\User, then an \BishopB\Vfl\NoVanillaUserMappedToGuest
+     * a \BishopB\Forum\User, then an \BishopB\Forum\NoVanillaUserMappedToGuest
      * exception will raise.
      */
     public $create_guest_account = null;
@@ -26,7 +26,7 @@ class UserMapperSynchronicity extends UserMapperByClosure
     /**
      * @var callable
      * Closure to call to create a user account. If not set, or if doesn't return
-     * a \BishopB\Vfl\User, then an \BishopB\Vfl\NoVanillaUserMappedToUser
+     * a \BishopB\Forum\User, then an \BishopB\Forum\NoVanillaUserMappedToUser
      * exception will raise.  Will be given the vanilla user ID expected and the
      * application user object.
      */

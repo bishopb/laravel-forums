@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,7 +16,7 @@ class VanillaConnect extends Command
 	 *
 	 * @var string
 	 */
-	protected $name = 'vfl:connect';
+	protected $name = 'forum:connect';
 
 	/**
 	 * The console command description.
@@ -32,7 +32,7 @@ class VanillaConnect extends Command
 	 */
 	public function fire()
 	{
-        $setup = new \BishopB\Vfl\VanillaSetup();
+        $setup = new VanillaSetup();
         $setup->install();
 	}
 

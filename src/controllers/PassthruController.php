@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 use Illuminate\Http\Request;
 use Illuminate\Config\Repository as Config;
@@ -22,7 +22,7 @@ class PassthruController extends \Controller
     {
         // get the segments after our route prefix (/foo/bar) and feed into vanilla
         $segments = $this->request->segments();
-        if (vfl_get_route_prefix() === head($segments)) {
+        if (forum_get_route_prefix() === head($segments)) {
             array_shift($segments);
         }
 

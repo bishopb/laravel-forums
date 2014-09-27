@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * Generic stuff we need/do as we interact with Vanilla
@@ -12,7 +12,7 @@ trait VanillaHelperTrait
      */
     public static function get_vanilla_path()
     {
-        return \Config::get('vfl::paths.vanilla');
+        return \Config::get('forum::paths.vanilla');
     }
 
     /**

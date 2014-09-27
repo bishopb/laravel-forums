@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * We need to provide the Vanilla implementation of these functions that
@@ -37,7 +37,7 @@ class UrlGenerator extends \Illuminate\Routing\UrlGenerator
             return \Request::url();
 
         } else { // relative
-            return vfl_get_route_prefix() . '/' . ltrim($path, '/');
+            return forum_get_route_prefix() . '/' . ltrim($path, '/');
         }
     }
 }

@@ -1,5 +1,5 @@
 <?php
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 class ConversationMessage extends BaseModel
 {
@@ -32,7 +32,7 @@ class ConversationMessage extends BaseModel
     public function conversation()
     {
         return $this->belongsTo(
-            '\BishopB\Vfl\Conversation', 'ConversationID', 'ConversationID'
+            '\BishopB\Forum\Conversation', 'ConversationID', 'ConversationID'
         );
     }
 }

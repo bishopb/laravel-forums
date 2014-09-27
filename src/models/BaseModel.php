@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * Common settings amongst all Vanilla models.
@@ -32,7 +32,7 @@ class BaseModel extends \Eloquent
     {
         // if we're using the auditing trait, guard the audit columns
         $reflection = new \ReflectionClass($this);
-        if (array_key_exists('BishopB\Vfl\AuditingTrait', $reflection->getTraits())) {
+        if (array_key_exists('BishopB\Forum\AuditingTrait', $reflection->getTraits())) {
             $this->guarded = $this->guarded + $this->getAuditors();
         }
 

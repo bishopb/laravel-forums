@@ -1,6 +1,6 @@
 {
-    "name": "bishopb/vanilla-for-laravel",
-    "description": "Laravel 4 package of Vanilla Forums",
+    "name": "bishopb/laravel-forums",
+    "description": "Forums and discussion boards for Laravel, using the Vanilla Forums engine.",
     "license": "GPL-2.0",
     "authors": [
         {
@@ -18,7 +18,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BishopB\\Vfl\\": "src/"
+            "BishopB\\Forum\\": "src/"
         }
     },
     "config": {

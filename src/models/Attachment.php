@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 class Attachment extends BaseModel
 {
@@ -37,6 +37,6 @@ class Attachment extends BaseModel
     // relations
     public function user()
     {
-        return $this->hasOne('\BishopB\Vfl\User', 'UserID', 'ForeignUserID');
+        return $this->hasOne('\BishopB\Forum\User', 'UserID', 'ForeignUserID');
     }
 }

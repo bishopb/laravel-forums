@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 class Invitation extends BaseModel
 {
@@ -33,6 +33,6 @@ class Invitation extends BaseModel
     // relations
     public function accepting_user()
     {
-        return $this->hasOne('\BishopB\Vfl\User', 'UserID', 'AcceptedUserID');
+        return $this->hasOne('\BishopB\Forum\User', 'UserID', 'AcceptedUserID');
     }
 }

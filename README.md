@@ -34,15 +34,15 @@ Add the package service provider to your `app/config/app.php`:
 ```php
 'providers' => array (
     // ... other providers here
-    'BishopB\Vfl\VflServiceProvider',
+    'BishopB\Forum\ForumServiceProvider',
 ),
 ```
 
-Install the migrations: `php artisan vfl:migrate`
+Install the migrations: `php artisan forum:migrate`
 
-Connect Vanilla to Laravel: `php artisan vfl:connect`
+Connect Vanilla to Laravel: `php artisan forum:connect`
 
-Navigate to the `/vfl` route.  You should see an error, because Vanilla doesn't yet know about your users.  The last step is to decide and implement how your users map to Vanilla.  See the next section, Usage.
+Navigate to the `/forum` route.  You should see an error, because Vanilla doesn't yet know about your users.  The last step is to decide and implement how your users map to Vanilla.  See the next section, Usage.
 
 ## Mapping application users to forum users
 Your application has Users.  So does Vanilla.  The two user sets are compatible, but probably not a one-to-one mapping.  Consequently, you'll need to explicitly define how the two map.
@@ -55,9 +55,9 @@ Vanilla for Laravel ships with three mappers:
 ### One-to-one mapping by primary key
 This is the default.  When your users navigate into the Vanilla route, the Vanilla user with the same ID as your app user is logged into Vanilla.  For this to work, you will have to create, modify, and delete Vanilla users when you create, modify, or delete your own users.  Code like this will get you started:
 ```php
-use \BishopB\Vfl\User;
-use \BishopB\Vfl\UserRepository;
-use \BishopB\Vfl\RoleRepository;
+use \BishopB\Forum\User;
+use \BishopB\Forum\UserRepository;
+use \BishopB\Forum\RoleRepository;
 
 // create a moderator member
 $user = UserRepository::createWithRoles(
@@ -74,10 +74,10 @@ $user = UserRepository::createWithRoles(
 This is the easiest to get going, but is not terribly efficient. Every time your users navigate into the Vanilla route, the mapper either creates a new Vanilla user to match the application user, or updates the Vanilla user to reflect the current data in the application user. You only need to define exactly what happens, like so:
 ```php
 use \Illuminate\Auth\UserInterface as AppUser;
-use \BishopB\Vfl\User as VanillaUser;
+use \BishopB\Forum\User as VanillaUser;
 
-\App::bind('BishopB\Vfl\UserMapperInterface', function () {
-    $mapper = new \BishopB\Vfl\UserMapperSynchronicity();
+\App::bind('BishopB\Forum\UserMapperInterface', function () {
+    $mapper = new \BishopB\Forum\UserMapperSynchronicity();
     $mapper->create_guest_account = null; // you don't want guest access
                                           // or assign a function to create
                                           // a guest user
@@ -103,10 +103,10 @@ use \BishopB\Vfl\User as VanillaUser;
 ### Custom mapping
 Just like it says: custom.  You can totally do anything you want.
 ```php
-\App::bind('BishopB\Vfl\UserMapperInterface', function () {
-    $mapper = new \BishopB\Vfl\UserMapperByClosure();
+\App::bind('BishopB\Forum\UserMapperInterface', function () {
+    $mapper = new \BishopB\Forum\UserMapperByClosure();
     $mapper->setClosure(function (\Illuminate\Auth\UserInterface $user = null) {
-        // do whatever you want, it should return a \BishopB\Vfl\User
+        // do whatever you want, it should return a \BishopB\Forum\User
     });
     return $mapper;
 });
@@ -120,7 +120,7 @@ Follow the instructions in [`views/themes/default/README.md`](views/themes/defau
 ## Events
 Vanilla emits events during its operation, and you can use these events to modify how Vanilla operates.  To begin, read up on [Vanilla Plugin development](http://vanillaforums.org/docs/pluginquickstart).  Then, capture the events:
 ```php
-\Event::listen('vfl.event', function ($data) {
+\Event::listen('forum.event', function ($data) {
     // use $data according to the plugin guidelines
 });
 ```

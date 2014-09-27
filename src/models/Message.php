@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 class Message extends BaseModel
 {
@@ -28,7 +28,7 @@ class Message extends BaseModel
     public function category()
     {
         return $this->hasOne(
-            '\BishopB\Vfl\Category', 'CategoryID', 'CategoryID'
+            '\BishopB\Forum\Category', 'CategoryID', 'CategoryID'
         );
     }
 }

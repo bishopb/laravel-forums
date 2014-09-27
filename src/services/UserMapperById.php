@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * Resolves a Vanilla user by matching the id.  So if you have a user with
@@ -12,8 +12,8 @@ namespace BishopB\Vfl;
 class UserMapperById extends AbstractUserMapper
 {
     /**
-     * @return BishopB\Vfl\User
-     * @throws BishopB\Vfl\NoVanillaUserMappedToUser
+     * @return BishopB\Forum\User
+     * @throws BishopB\Forum\NoVanillaUserMappedToUser
      */
     public function resolve(\Illuminate\Auth\UserInterface $user = null)
     {

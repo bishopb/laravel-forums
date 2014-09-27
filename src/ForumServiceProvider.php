@@ -1,11 +1,10 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 use \Illuminate\Auth\UserInterface as AppUser;
-use \BishopB\Vfl\User as VanillaUser;
 
-class VflServiceProvider extends \Illuminate\Support\ServiceProvider
+class ForumServiceProvider extends \Illuminate\Support\ServiceProvider
 {
 	/**
 	 * Routing is about to happen, define things we'll need for routing.
@@ -14,7 +13,7 @@ class VflServiceProvider extends \Illuminate\Support\ServiceProvider
 	 */
 	public function boot()
 	{
-		$this->package('bishopb/vanilla-for-laravel', 'vfl', __DIR__);
+		$this->package('bishopb/vanilla-for-laravel', 'forum', __DIR__);
 
 		require_once __DIR__ . '/boot/helpers.php';
 		require_once __DIR__ . '/boot/routes.php';
@@ -32,17 +31,19 @@ class VflServiceProvider extends \Illuminate\Support\ServiceProvider
         );
 
         // providers
-        $this->app->bind('BishopB\Vfl\UserMapperInterface', 'BishopB\Vfl\UserMapperById');
+        $this->app->bind(
+            'BishopB\Forum\UserMapperInterface', 'BishopB\Forum\UserMapperById'
+        );
 
         // commands
-        $this->app['vfl::commands.migrate'] = $this->app->share(function ($app) {
+        $this->app['forum::commands.migrate'] = $this->app->share(function ($app) {
             return new VanillaMigrate();
         });
-        $this->app['vfl::commands.connect'] = $this->app->share(function ($app) {
+        $this->app['forum::commands.connect'] = $this->app->share(function ($app) {
             return new VanillaConnect();
         });
 
-        $this->commands('vfl::commands.migrate', 'vfl::commands.connect');
+        $this->commands('forum::commands.migrate', 'forum::commands.connect');
 	}
 
 	/**

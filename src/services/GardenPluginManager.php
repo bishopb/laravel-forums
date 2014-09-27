@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * Our own PluginManager, which will be injected into Vanilla for its use.
@@ -15,7 +15,7 @@ class GardenPluginManager extends \Gdn_PluginManager
     )
     {
         // re-publish
-        \Event::fire('vfl.event', [
+        \Event::fire('forum.event', [
             'Sender'           => $Sender,
             'EventClassName'   => $EventClassName,
             'EventName'        => $EventName,
@@ -24,7 +24,7 @@ class GardenPluginManager extends \Gdn_PluginManager
         ]);
 
         // log if we want to
-        if (\Config::get('vfl::package.trace-include-events', false)) {
+        if (\Config::get('forum::package.trace-include-events', false)) {
             Trace(['EventClassName' => $EventClassName, 'EventName' => $EventName]);
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace BishopB\Vfl;
+namespace BishopB\Forum;
 
 /**
  * Implement how to resolve the Vanilla user associated with the Auth::user()
@@ -12,9 +12,9 @@ interface UserMapperInterface
      * corresponding to `Auth::user()` (if logged in) and `Auth::guest()` (if
      * not logged in).
      *
-     * @return BishopB\Vfl\User
-     * @throws BishopB\Vfl\NoVanillaUserMappedToAuthenticatedUser
-     * @throws BishopB\Vfl\NoVanillaUserMappedToGuest
+     * @return BishopB\Forum\User
+     * @throws BishopB\Forum\NoVanillaUserMappedToAuthenticatedUser
+     * @throws BishopB\Forum\NoVanillaUserMappedToGuest
      */
     public function current();
 
@@ -25,8 +25,8 @@ interface UserMapperInterface
      * resolver should treat this as the "guest" or "anonymous" user.
      *
      * @param mixed $user
-     * @return BishopB\Vfl\User
-     * @throws BishopB\Vfl\NoVanillaUserMappedToUser
+     * @return BishopB\Forum\User
+     * @throws BishopB\Forum\NoVanillaUserMappedToUser
      */
     public function resolve(\Illuminate\Auth\UserInterface $user = null);
 }

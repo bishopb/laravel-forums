@@ -42,7 +42,7 @@ Install the migrations: `php artisan forum:migrate`
 
 Connect Vanilla to Laravel: `php artisan forum:connect`
 
-Navigate to the `/forum` route.  You should see an error, because Vanilla doesn't yet know about your users.  The last step is to decide and implement how your users map to Vanilla.  See the next section, Usage.
+Navigate to the `/forum` route.  You should see an error, because Vanilla doesn't yet know about your users.  The last step is to decide and implement how your users map to Vanilla.  Read on.
 
 ## Mapping application users to forum users
 Your application has Users.  So does Vanilla.  The two user sets are compatible, but probably not a one-to-one mapping.  Consequently, you'll need to explicitly define how the two map.

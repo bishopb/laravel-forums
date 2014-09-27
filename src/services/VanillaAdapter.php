@@ -9,8 +9,10 @@ namespace BishopB\Vfl;
  * configuration has been loaded.  We can do basically anything to the
  * Vanilla Environment at this point.
  */
-class VanillaAdapter extends AbstractVanillaService
+class VanillaAdapter
 {
+    use VanillaHelperTrait;
+
     /**
      * How to run this adapter. This will be handed over to Vanilla.
      */
@@ -26,6 +28,7 @@ class VanillaAdapter extends AbstractVanillaService
     {
         $this->adapt_db();
         $this->adapt_request();
+        $this->adapt_pluginmanager();
     }
 
     /**
@@ -75,6 +78,16 @@ class VanillaAdapter extends AbstractVanillaService
         \Gdn::FactoryInstall(
             \Gdn::AliasRequest, '\BishopB\Vfl\GardenRequest',
             NULL, \Gdn::FactoryRealSingleton, 'Create'
+        );
+    }
+
+    /**
+     * Hook ourselves into Vanilla's event system.
+     */
+    public function adapt_pluginmanager()
+    {
+        \Gdn::FactoryInstall(
+            \Gdn::AliasPluginManager, '\BishopB\Vfl\GardenPluginManager'
         );
     }
 }

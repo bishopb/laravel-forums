@@ -9,31 +9,18 @@ class SeedBaseVanillaTables extends Migration
      */
 	public function up()
 	{
+        // we will have some crazy ID values, cajole MySQL into accepting them
+        $grammar = Schema::getConnection()->getSchemaGrammar();
+        if ($grammar instanceof \Illuminate\Database\Schema\Grammars\MySqlGrammar) {
+            DB::statement('SET SESSION SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";');
+        }
+
+        // do the seeding
         DB::beginTransaction();
         foreach ($this->getSeedData() as $table => $rows) {
             // Note: each row may have different columns: can't use bulk insert
             foreach ($rows as $row) {
-                if ('GDN_Permission' == $table) {
-                    $sql = sprintf(
-                        'INSERT INTO %s (%s) VALUES (%s)',
-                        "`$table`",
-                        implode(',', array_map(
-                            function ($column) {
-                                return "`$column`";
-                            },
-                            array_keys($row)
-                        )),
-                        implode(',', array_map(
-                            function ($value) {
-                                return '"' . $value . '"';
-                            },
-                            array_values($row)
-                        ))
-                    );
-                    DB::statement($sql);
-                } else {
-                    DB::table($table)->insert($row);
-                }
+                $this->insertRow($table, $row);
             }
         }
         DB::commit();
@@ -50,12 +37,43 @@ class SeedBaseVanillaTables extends Migration
 	}
 
     /**
+     * Insert a row of data into a table.
+     */
+    protected function insertRow($table, array $row)
+    {
+        // permissions table has columns named like `foo.bar.baz`
+        // seriously, you can't make this stuff up.
+        if ('GDN_Permission' == $table) {
+            $sql = sprintf(
+                'INSERT INTO %s (%s) VALUES (%s)',
+                "`$table`",
+                implode(',', array_map(
+                    function ($column) {
+                        return "`$column`";
+                    },
+                    array_keys($row)
+                )),
+                implode(',', array_map(
+                    function ($value) {
+                        return '"' . $value . '"';
+                    },
+                    array_values($row)
+                ))
+            );
+            DB::statement($sql);
+        } else {
+            DB::table($table)->insert($row);
+        }
+    }
+
+    /**
      * Give me the seed data.
      */
     protected function getSeedData()
     {
         $systemUserId = 0;
         $dateInserted = date('Y-m-d H:i:s');
+        $theIpAddress = \Request::getClientIp();
 
         return [
             /* {{{ */ 'GDN_ActivityType' => [[
@@ -195,11 +213,22 @@ class SeedBaseVanillaTables extends Migration
             ]], /* }}} */
             /* {{{ */'GDN_Category' => [[
                 'CategoryID' => -1,
-                'TreeLeft' => -1,
-                'TreeRight' => -1,
+                'TreeLeft' => 1,
+                'TreeRight' => 4,
                 'Name' => 'Root',
                 'UrlCode' => 'root',
                 'Description' => 'Root of category tree. Users should never see this.',
+                'InsertUserID' => $systemUserId,
+                'UpdateUserID' => $systemUserId,
+                'DateInserted' => $dateInserted,
+                'DateUpdated' => $dateInserted,
+            ],[
+                'CategoryID' => 1,
+                'TreeLeft' => 2,
+                'TreeRight' => 3,
+                'Name' => 'General discussions',
+                'UrlCode' => 'general',
+                'Description' => 'General discussions about unimportant stuff.',
                 'InsertUserID' => $systemUserId,
                 'UpdateUserID' => $systemUserId,
                 'DateInserted' => $dateInserted,
@@ -423,12 +452,16 @@ class SeedBaseVanillaTables extends Migration
                 'Vanilla.Comments.Delete' => 1,
             ]],/* }}} */
             /* {{{ */'GDN_User' => [[
-                'UserID' => 0,
+                'UserID' => $systemUserId,
                 'Name' => \Config::get('mail.from.name'),
-                'Password' => Hash::make(str_random(64)),
+                'Password' => str_random(64),
                 'HashMethod' => 'Random',
                 'Email' => \Config::get('mail.from.address'),
                 'ShowEmail' => true,
+                'DateInserted' => $dateInserted,
+                'InsertIPAddress' => $theIpAddress,
+                'DateUpdated' => $dateInserted,
+                'UpdateIPAddress' => $theIpAddress,
             ]], /* }}} */
         ];
     }

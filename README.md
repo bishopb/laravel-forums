@@ -39,25 +39,89 @@ Install the migrations: `php artisan vfl:migrate`
 
 Connect Vanilla to Laravel: `php artisan vfl:connect`
 
-Navigate in your app to the `vfl/` route and you will see Vanilla!
+Navigate to the `/vfl` route.  You should see an error, because Vanilla doesn't yet know about your users.  The last step is to decide and implement how your users map to Vanilla.  See the next section, Usage.
 
-Usage
------
-Vanilla Forums has [no concept of anonymous posting](https://github.com/vanilla/vanilla/issues/465), which means you must have at least one Vanilla user model and you must authenticate to Vanilla appropriately.  Bottom line: you cannot use this package out of the box.  Find your use case and implement accordingly:
+Mapping application users to Vanilla users
+------------------------------------------
+Your application has Users.  So does Vanilla.  The two user sets are compatible, but probably not a one-to-one mapping.  Consequently, you'll need to explicitly define how the two map.
 
-| You Want | You Must |
-| 1. Guest users to post to your forum as "Anonymous". | Create an anonymous Vanilla user and authenticate that user when your app boots.  Posts will be made as that user. |
-| 2. Autheticated users to post as themselves. | Create one Vanilla user for every user in your app and authenticate that user to Vanilla upon login.  When the user is deleted, archive the user in Vanilla. |
+Vanilla for Laravel ships with three mappers:
+ 1. Your application's user and Vanilla's map one-to-one by their ID primary key
+ 2. You synchronize the Vanilla user information every time it's requested
+ 3. You custom define the relationship
 
-++ Creating a user with a particular roles
+++ One-to-one mapping by primary key
+This is the default.  When your users navigate into the Vanilla route, the Vanilla user with the same ID as your app user is logged into Vanilla.  For this to work, you will have to create, modify, and delete Vanilla users when you create, modify, or delete your own users.  Code like this will get you started:
 ```php
 use \BishopB\Vfl\User;
+use \BishopB\Vfl\UserRepository;
 use \BishopB\Vfl\RoleRepository;
 
-$user = User::createWithRoles(
-    [ 'Name' => 'Whatever', 'Email' => 'x@example.com', ... ],
+// create a moderator member
+$user = UserRepository::createWithRoles(
+    [
+        'Name' => 'Jane Q. Doe',
+        'Password' => User::crypt_password(str_random(64), 'vanilla'),
+        'HashMethod' => 'vanilla',
+    ],
     [ RoleRepository::member(), RoleRepository::moderator() ]
 );
+
+```
+++ Auto-synchronization
+This is the easiest to get going, but is not terribly efficient. Every time your users navigate into the Vanilla route, the mapper either creates a new Vanilla user to match the application user, or updates the Vanilla user to reflect the current data in the application user. You only need to define exactly what happens, like so:
+```php
+use \Illuminate\Auth\UserInterface as AppUser;
+use \BishopB\Vfl\User as VanillaUser;
+
+\App::bind('BishopB\Vfl\UserMapperInterface', function () {
+    $mapper = new \BishopB\Vfl\UserMapperSynchronicity();
+    $mapper->create_guest_account = null; // you don't want guest access
+                                          // or assign a function to create
+                                          // a guest user
+    $mapper->create_account_for = function ($vanillaID, AppUser $user) {
+        return UserRepository::createWithRoles(
+            [
+                'UserID' => $vanillaID,
+                'Name' => $user->lastCommaFirstName,
+                'Password' => str_random(64),
+                'HashMethod' => 'random',
+            ],
+            [ RoleRepository::member() ]
+        );
+    };
+    $mapper->update_account_for = function (AppUser $user, VanillaUser $vanillaUser) {
+        $vanillaUser->Name = $user->lastCommaFirstName;
+        $vanillaUser->save();
+    };
+    return $mapper;
+});
+```
+
+++ Custom mapping
+Just like it says: custom.  You can totally do anything you want.
+```php
+\App::bind('BishopB\Vfl\UserMapperInterface', function () {
+    $mapper = new \BishopB\Vfl\UserMapperByClosure();
+    $mapper->setClosure(function (\Illuminate\Auth\UserInterface $user = null) {
+        // do whatever you want, it should return a \BishopB\Vfl\User
+    });
+    return $mapper;
+});
+```
+
+Themes
+------
+You have full control over the look and feel of your Vanilla install.
+
+Follow the instructions in [`views/themes/default/README.md`](views/themes/default/README.md).
+
+++ Events
+Vanilla emits events during its operation, and you can use these events to modify how Vanilla operates.  To begin, read up on [Vanilla Plugin development](http://vanillaforums.org/docs/pluginquickstart).  Then, capture the events:
+```php
+\Event::listen('vfl.event', function ($data) {
+    // use $data according to the plugin guidelines
+});
 ```
 
 Configuration

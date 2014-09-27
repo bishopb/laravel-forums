@@ -10,6 +10,11 @@ class BaseModel extends \Eloquent
     // consistent model-level validation
     use \Watson\Validating\ValidatingTrait;
 
+    // that throws exceptions when validation fails: developers are
+    // responsible for ensuring models meet the requirements before attempting
+    // to persist
+    protected $throwValidationExceptions = true;
+
     // vanilla handles timestamps differently
     public $timestamps = false;
 
@@ -25,7 +30,9 @@ class BaseModel extends \Eloquent
      */
     public function __construct(array $attributes = array())
     {
-        if (is_callable([$this, 'getAuditors'])) {
+        // if we're using the auditing trait, guard the audit columns
+        $reflection = new \ReflectionClass($this);
+        if (array_key_exists('BishopB\Vfl\AuditingTrait', $reflection->getTraits())) {
             $this->guarded = $this->guarded + $this->getAuditors();
         }
 

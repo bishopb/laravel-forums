@@ -15,16 +15,19 @@ class AuditingObserver
      */
     public function creating(\Illuminate\Database\Eloquent\Model $model)
     {
-        $auditors = $model->getAuditors();
-        if ($this->needs($auditors, 'InsertUserID')) {
-            $model->InsertUserID = Auth::user()->getKey();
+        // insert specific...
+        if ($this->needs($model, 'InsertUserID')) {
+            $model->InsertUserID = \Auth::user()->getKey();
         }
-        if ($this->needs($auditors, 'DateInserted')) {
-            $model->DateInserted = new DateTime();
+        if ($this->needs($model, 'DateInserted')) {
+            $model->DateInserted = $this->getNow();
         }
-        if ($this->needs($auditors, 'InsertIPAddress')) {
+        if ($this->needs($model, 'InsertIPAddress')) {
             $model->InsertIPAddress = \Request::getClientIp();
         }
+
+        // ... now fill in the update too with identical values
+        $this->updating($model);
     }
 
     /**
@@ -35,14 +38,13 @@ class AuditingObserver
      */
     public function updating(\Illuminate\Database\Eloquent\Model $model)
     {
-        $auditors = $model->getAuditors();
-        if ($this->needs($auditors, 'UpdateUserID')) {
-            $model->UpdateUserID = Auth::user()->getKey();
+        if ($this->needs($model, 'UpdateUserID')) {
+            $model->UpdateUserID = \Auth::user()->getKey();
         }
-        if ($this->needs($auditors, 'DateUpdated')) {
-            $model->DateUpdated = new DateTime();
+        if ($this->needs($model, 'DateUpdated')) {
+            $model->DateUpdated = $this->getNow();
         }
-        if ($this->needs($auditors, 'UpdateIPAddress')) {
+        if ($this->needs($model, 'UpdateIPAddress')) {
             $model->UpdateIPAddress = \Request::getClientIp();
         }
     }
@@ -52,18 +54,31 @@ class AuditingObserver
     /**
      * Test for the presence of a given auditing column in the attribute data.
      *
-     * @param array $auditors The auditing-related attributes in the model.
-     * @param string $attribute The attribute to check if we need.
+     * @param array $model
+     * @param string $attribute
      */
-    protected function needs(array $auditors, $attribute)
+    protected function needs(\Eloquent $model, $attribute)
     {
         return (
             (
-                isset($auditors[$attribute]) && // audit column in model &
-                empty($this->{$attribute})      // column not already set
+                in_array($attribute, $model->getAuditors()) && // audit column in model &
+                empty($model->getAttribute($attribute))        // column not already set
             ) ?
             true :
             false
         );
+    }
+
+    /**
+     * Get the current time.
+     */
+    protected function getNow()
+    {
+        static $now = null;
+        if (null === $now) {
+            $now = new \DateTime();
+        }
+
+        return $now;
     }
 }

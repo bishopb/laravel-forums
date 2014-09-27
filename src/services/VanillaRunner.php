@@ -5,14 +5,16 @@ namespace BishopB\Vfl;
 /**
  * Provides a mechanism to run Vanilla inside of Laravel.
  */
-class VanillaRunner extends AbstractVanillaService
+class VanillaRunner
 {
+    use VanillaHelperTrait;
+
     /**
-     * Are we inside of ::view()?
+     * Log the given user in to this session
      */
-    public function isRunning()
+    public function login(User $user)
     {
-        return defined('APPLICATION_VERSION');
+        $this->user = $user;
     }
 
     /**
@@ -47,17 +49,25 @@ class VanillaRunner extends AbstractVanillaService
         }
 
         // otherwise, dispatch into vanilla
-        new VanillaBootstrap();
+        $user = $this->user;
+        VanillaBootstrap::call(function () use ($user, $segments) {
+            define('TIME_TO_DIE', true);
 
-        // Create and configure the dispatcher.
-        $Dispatcher = \Gdn::Dispatcher();
+            // Create the session and stuff the user in
+            \Gdn::Authenticator()->SetIdentity($user->getKey(), false /* no persist */);
+            \Gdn::Session()->Start(false /* use set identity */, false /* no persist */);
+            \Gdn::Session()->SetPreference('Authenticator', 'Gdn_Authenticator');
 
-        $EnabledApplications = \Gdn::ApplicationManager()->EnabledApplicationFolders();
-        $Dispatcher->EnabledApplicationFolders($EnabledApplications);
-        $Dispatcher->PassProperty('EnabledApplications', $EnabledApplications);
+            // Create and configure the dispatcher.
+            $Dispatcher = \Gdn::Dispatcher();
 
-        // Process the request.
-        $Dispatcher->Start();
-        $Dispatcher->Dispatch(implode('/', $segments));
+            $EnabledApplications = \Gdn::ApplicationManager()->EnabledApplicationFolders();
+            $Dispatcher->EnabledApplicationFolders($EnabledApplications);
+            $Dispatcher->PassProperty('EnabledApplications', $EnabledApplications);
+
+            // Process the request.
+            $Dispatcher->Start();
+            $Dispatcher->Dispatch(implode('/', $segments));
+        });
     }
 }

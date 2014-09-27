@@ -12,22 +12,14 @@ use Illuminate\Config\Repository as Config;
  */
 class PassthruController extends \Controller
 {
-    public function __construct(Request $request, Config $config)
+    public function __construct(Request $request, UserMapperInterface $mapper)
     {
         $this->request = $request;
-        $this->config  = $config;
-
-        $this->vanilla_path = $this->config->get('vfl::paths.vanilla');
+        $this->mapper  = $mapper;
     }
 
     public function index()
     {
-        $user = User::createWithRoles(
-            [ 'Name' => 'Whatever', 'Email' => 'x@example.com', ],
-            [ RoleRepository::member(), RoleRepository::moderator() ]
-        );
-        dd($user, $user->roles);
-
         // get the segments after our route prefix (/foo/bar) and feed into vanilla
         $segments = $this->request->segments();
         if (vfl_get_route_prefix() === head($segments)) {
@@ -39,8 +31,9 @@ class PassthruController extends \Controller
             $segments = [ 'discussions' ];
         }
 
-        // run vanilla with the path we got
+        // run vanilla with the path and user we want
         $runner = new VanillaRunner();
+        $runner->login($this->mapper->current());
         $runner->view($segments);
     }
 }

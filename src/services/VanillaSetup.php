@@ -5,8 +5,10 @@ namespace BishopB\Vfl;
 /**
  * Perform the Vanilla setup tasks, just like someone did it manually.
  */
-class VanillaSetup extends AbstractVanillaService
+class VanillaSetup
 {
+    use VanillaHelperTrait;
+
     /**
      * Convince Vanilla it's installed.
      */

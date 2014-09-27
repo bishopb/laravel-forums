@@ -8,7 +8,7 @@ class User extends BaseModel
     protected $rules = [
         'Name'                     => 'required|max:50',
         'Password'                 => 'required|max:100',
-        'HashMethod'               => 'max:10',
+        'HashMethod'               => 'in:crypt,django,drupal,ipb,joomla,mybb,phpbb,punbb,reset,random,smf,unknown,vanilla,vbulletin,webwiz,xenforo,yaf',
         'Photo'                    => 'max:255',
         'Title'                    => 'max:100',
         'Location'                 => 'max:100',
@@ -60,6 +60,8 @@ class User extends BaseModel
     protected $table = 'GDN_User';
     protected $primaryKey = 'UserID';
 
+    protected $hidden = [ 'Password' ];
+
     public function getDates()
     {
         return [
@@ -78,17 +80,10 @@ class User extends BaseModel
 
     // custom
     /**
-     * Manfacture a user with a particular role(s).
+     * Encrypt a password that's compatible with the Vanilla world.
      */
-    public static function createWithRoles(array $attributes, array $roles)
+    public static function crypt_password($password, $method = 'vanilla')
     {
-        \DB::beginTransaction();
-        $user = User::create($attributes);
-        foreach ($roles as $role) {
-            $user->roles()->save($role);
-        }
-        \DB::commit();
-
-        return $user;
+        return \Hash::make($password);
     }
 }

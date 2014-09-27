@@ -20,7 +20,7 @@ class UrlGenerator extends \Illuminate\Routing\UrlGenerator
         );
     }
 
-    function asset($path)
+    function asset($path, $secure = null)
     {
         return parent::to(
             vfl_get_route_prefix() . $path,

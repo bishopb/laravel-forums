@@ -11,22 +11,27 @@ namespace BishopB\Vfl;
  */
 class UrlGenerator extends \Illuminate\Routing\UrlGenerator
 {
-    function to($path, $parameters = null, $secure = false)
+    public function to($path, $parameters = null, $secure = false)
     {
         return parent::to(
-            vfl_get_route_prefix() . '/' . $path,
+            $this->rewrite_url($path),
             (is_array($parameters) ? $parameters : []),
             $secure
         );
     }
 
-    function asset($path, $secure = null)
+    public function asset($path, $secure = null)
     {
-        return parent::to(
-            vfl_get_route_prefix() . $path,
-            [],
-            false
-        );
+        return parent::to($this->rewrite_url($path), [], false);
+    }
+
+    private function rewrite_url($path)
+    {
+        if (starts_with($path, 'http') || starts_with($path, '//')) {
+            return $path;
+        }
+
+        return vfl_get_route_prefix() . '/' . $path;
     }
 }
 

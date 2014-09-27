@@ -27,11 +27,18 @@ class UrlGenerator extends \Illuminate\Routing\UrlGenerator
 
     private function rewrite_url($path)
     {
-        if (starts_with($path, 'http') || starts_with($path, '//')) {
+        if (starts_with($path, 'http') || starts_with($path, '//')) { // absolute
             return $path;
-        }
 
-        return vfl_get_route_prefix() . '/' . $path;
+        } else if (starts_with($path, '{')) { // smarty template variable
+            return $path;
+
+        } else if (empty($path)) { // self
+            return \Request::url();
+
+        } else { // relative
+            return vfl_get_route_prefix() . '/' . ltrim($path, '/');
+        }
     }
 }
 

@@ -40,47 +40,50 @@ Add the package service provider to your `app/config/app.php`:
 
 Install the migrations: `php artisan forum:migrate`
 
-Connect Vanilla to Laravel: `php artisan forum:connect`
+Connect Vanilla and Laravel: `php artisan forum:connect`
 
 Navigate to the `/forum` route.  You should see an error, because Vanilla doesn't yet know about your users.  The last step is to decide and implement how your users map to Vanilla.  Read on.
 
 ## Mapping application users to forum users
-Your application has Users.  So does Vanilla.  The two user sets are compatible, but probably not a one-to-one mapping.  Consequently, you'll need to explicitly define how the two map.
+Your application has Users.  So does Vanilla.  The two user sets are compatible, but maybe not a one-to-one mapping.  Consequently, you need to explicitly define how the two map.
 
-Vanilla for Laravel ships with three mappers:
- 1. Your application's user and Vanilla's map one-to-one by their ID primary key
- 2. You synchronize the Vanilla user information every time it's requested
- 3. You custom define the relationship
+Laravel forums ships with three mapping strategies:
+ 1. One-to-one by primary key
+ 2. Synchronize the two on-demand
+ 3. Custom closure
 
 ### One-to-one mapping by primary key
-This is the default.  When your users navigate into the Vanilla route, the Vanilla user with the same ID as your app user is logged into Vanilla.  For this to work, you will have to create, modify, and delete Vanilla users when you create, modify, or delete your own users.  Code like this will get you started:
+This is the default.  The Vanilla user matches with the application user by primary key, so like "User.id == GDN_User.UserID". In this strategy, you must create, modify, and delete Vanilla users when you create, modify, or delete your application users.  Code like this will get you started:
 ```php
 use \BishopB\Forum\User;
 use \BishopB\Forum\UserRepository;
 use \BishopB\Forum\RoleRepository;
 
-// create a moderator member
-$user = UserRepository::createWithRoles(
-    [
-        'Name' => 'Jane Q. Doe',
-        'Password' => User::crypt_password(str_random(64), 'vanilla'),
-        'HashMethod' => 'vanilla',
-    ],
-    [ RoleRepository::member(), RoleRepository::moderator() ]
-);
-
+function create_an_app_user() {
+    // make this app user a member moderator
+    $user = UserRepository::createWithRoles(
+        [
+            'Name' => 'Jane Q. Doe',
+            'Password' => User::crypt_password(str_random(64), 'vanilla'),
+            'HashMethod' => 'vanilla',
+        ],
+        [ RoleRepository::member(), RoleRepository::moderator() ]
+    );
+}
 ```
-### Auto-synchronization
-This is the easiest to get going, but is not terribly efficient. Every time your users navigate into the Vanilla route, the mapper either creates a new Vanilla user to match the application user, or updates the Vanilla user to reflect the current data in the application user. You only need to define exactly what happens, like so:
+
+### On-demand synchronization
+This is the easiest to get going, but may not be efficient. This strategy either creates a new Vanilla user to match the application user, or updates the Vanilla user to reflect the current data in the application user. If there is no application user, optionally define a guest user.
 ```php
+// in app/start.php
 use \Illuminate\Auth\UserInterface as AppUser;
 use \BishopB\Forum\User as VanillaUser;
 
 \App::bind('BishopB\Forum\UserMapperInterface', function () {
     $mapper = new \BishopB\Forum\UserMapperSynchronicity();
-    $mapper->create_guest_account = null; // you don't want guest access
-                                          // or assign a function to create
-                                          // a guest user
+    $mapper->create_guest_account = null; // when null, guests will not be able
+                                          // to access the forums. Change to a 
+                                          // closure to implement
     $mapper->create_account_for = function ($vanillaID, AppUser $user) {
         return UserRepository::createWithRoles(
             [
@@ -112,13 +115,13 @@ Just like it says: custom.  You can totally do anything you want.
 });
 ```
 
-## Themes
-You have full control over the look and feel of your Vanilla install.
+## Views and themes
+You can find all the views in the `views/themes/default` folder.  Follow the instructions in [`views/themes/default/README.md`](views/themes/default/README.md) to get started.
 
-Follow the instructions in [`views/themes/default/README.md`](views/themes/default/README.md).
+A word of note.  These views are right out of Vanilla and are based on [Smarty](http://www.smarty.net/).  It's not quite as easy as blade, but it's just as powerful.
 
 ## Events
-Vanilla emits events during its operation, and you can use these events to modify how Vanilla operates.  To begin, read up on [Vanilla Plugin development](http://vanillaforums.org/docs/pluginquickstart).  Then, capture the events:
+Vanilla emits events during its operation, and you can use these events to react or modify how Vanilla operates.  To begin, read up on [Vanilla Plugin development](http://vanillaforums.org/docs/pluginquickstart).  Then, capture the events:
 ```php
 \Event::listen('forum.event', function ($data) {
     // use $data according to the plugin guidelines
@@ -126,7 +129,7 @@ Vanilla emits events during its operation, and you can use these events to modif
 ```
 
 ## Troubleshooting
-Things go wrong.  There's a least a way to peek under the hood and see what the Vanilla engine is doing.  Here you go:
+Things go wrong.  There's at least a way to peek under the hood and see what the Vanilla engine is doing.  Here you go:
 
   * Publish the package configuration files: `php artisan config:publish bishopb/laravel-forums`
   * Edit `app/config/packages/bishopb/laravel-forums/package.php`

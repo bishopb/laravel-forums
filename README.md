@@ -1,7 +1,6 @@
-vanilla-for-laravel
-===================
+# Laravel Forms
 
-Laravel 4 package of [Vanilla Forums](https://github.com/vanilla/vanilla).
+A forums package for Laravel 4, built upon the [Vanilla Forums](https://github.com/vanilla/vanilla) engine.
 
 You might want this package if:
   1. You need a first-class forums solution integrated into your Laravel app, and
@@ -10,12 +9,16 @@ You might want this package if:
 
 Sound like what you need then?  Then this is your package!  We've packaged the excellent Vanilla Forums in a way that Laravel developers will love.
   * Compose it into your app just like any other package.
-  * Access the Vanilla data using Eloquent models.
+  * Access the Vanilla database tables using Eloquent models.
   * Modify the look and feel using templates.
   * Configure the forums using the typical configuration files.
 
-Installation
-------------
+## Requirements
+You will need:
+ 1. [Laravel 4](http://laravel.com).
+ 2. [MySQL 5](http://mysql.com).
+
+## Installation
 Edit your `composer.json` to include:
 ```json
 "repositories": [
@@ -41,8 +44,7 @@ Connect Vanilla to Laravel: `php artisan vfl:connect`
 
 Navigate to the `/vfl` route.  You should see an error, because Vanilla doesn't yet know about your users.  The last step is to decide and implement how your users map to Vanilla.  See the next section, Usage.
 
-Mapping application users to Vanilla users
-------------------------------------------
+## Mapping application users to forum users
 Your application has Users.  So does Vanilla.  The two user sets are compatible, but probably not a one-to-one mapping.  Consequently, you'll need to explicitly define how the two map.
 
 Vanilla for Laravel ships with three mappers:
@@ -50,7 +52,7 @@ Vanilla for Laravel ships with three mappers:
  2. You synchronize the Vanilla user information every time it's requested
  3. You custom define the relationship
 
-++ One-to-one mapping by primary key
+### One-to-one mapping by primary key
 This is the default.  When your users navigate into the Vanilla route, the Vanilla user with the same ID as your app user is logged into Vanilla.  For this to work, you will have to create, modify, and delete Vanilla users when you create, modify, or delete your own users.  Code like this will get you started:
 ```php
 use \BishopB\Vfl\User;
@@ -68,7 +70,7 @@ $user = UserRepository::createWithRoles(
 );
 
 ```
-++ Auto-synchronization
+### Auto-synchronization
 This is the easiest to get going, but is not terribly efficient. Every time your users navigate into the Vanilla route, the mapper either creates a new Vanilla user to match the application user, or updates the Vanilla user to reflect the current data in the application user. You only need to define exactly what happens, like so:
 ```php
 use \Illuminate\Auth\UserInterface as AppUser;
@@ -98,7 +100,7 @@ use \BishopB\Vfl\User as VanillaUser;
 });
 ```
 
-++ Custom mapping
+### Custom mapping
 Just like it says: custom.  You can totally do anything you want.
 ```php
 \App::bind('BishopB\Vfl\UserMapperInterface', function () {
@@ -110,13 +112,12 @@ Just like it says: custom.  You can totally do anything you want.
 });
 ```
 
-Themes
-------
+## Themes
 You have full control over the look and feel of your Vanilla install.
 
 Follow the instructions in [`views/themes/default/README.md`](views/themes/default/README.md).
 
-++ Events
+## Events
 Vanilla emits events during its operation, and you can use these events to modify how Vanilla operates.  To begin, read up on [Vanilla Plugin development](http://vanillaforums.org/docs/pluginquickstart).  Then, capture the events:
 ```php
 \Event::listen('vfl.event', function ($data) {
@@ -124,9 +125,16 @@ Vanilla emits events during its operation, and you can use these events to modif
 });
 ```
 
-Configuration
--------------
-To override the package behavior, publish the package's configuration files using Artisan:
-`php artisan config:publish bishopb/vanilla-for-laravel`
+## Troubleshooting
+Things go wrong.  There's a least a way to peek under the hood and see what the Vanilla engine is doing.  Here you go:
 
-then, edit `app/config/packages/bishopb/vanilla/*php` to suit.
+  * Publish the package configuration files: `php artisan config:publish bishopb/vanilla-for-laravel`
+  * Edit `app/config/packages/bishopb/vanilla-for-laravel/package.php`
+  * Set all these flags to `true`: `trace`, `trace-include-events`, `trace-include-queries`.
+  * Check your `app/storage/logs/laravel.log` for details.
+
+## Frequently Asked Questions
+1. **What does this package provide?**  Simply, forum software for Laravel.  Using the awesome Vanilla Forums engine, your Laravel application can now quickly and easily include fully-function discussion boards.
+2. **Is it free?** Yes, of course.
+3. **Can it do _______**?  If the community edition of Vanilla Forums can do it, this package can do it, but might not currently do it.
+4. **What "gaps" exist between this package and Vanilla Forums?**  This may not be a complete list: plugins.

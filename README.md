@@ -18,7 +18,7 @@ Sound like what you need then?  Then this is your package!  We've packaged the e
 ## Requirements
 You will need:
  1. [Laravel 4.2](http://laravel.com)
- 2. [MySQL 5.](http://mysql.com)
+ 2. [MySQL 5](http://mysql.com)
 
 ## Installation
 Edit your `composer.json` to include:

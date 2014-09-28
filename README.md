@@ -32,7 +32,7 @@ Edit your `composer.json` to include:
 "config": {
     "preferred-install": "dist"
 },
-"minimum-stability": "stable"
+"minimum-stability": "dev"
 ```
 Run `composer update bishopb/laravel-forums`.  
 

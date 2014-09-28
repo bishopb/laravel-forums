@@ -13,7 +13,7 @@ Sound like what you need then?  Then this is your package!  We've packaged the e
   * Modify the look and feel using templates.
   * Configure the forums using the typical configuration files.
 
-**WARNING**: This package is under development and has not yet reached alpha release. [Please report issues!](https://github.com/bishopb/laravel-forums/issues).
+**WARNING**: This package is pre-alpha and under active development. [Please report issues](https://github.com/bishopb/laravel-forums/issues) and look-out for BC breakage.
 
 ## Requirements
 You will need:

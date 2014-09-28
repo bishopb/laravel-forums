@@ -39,7 +39,7 @@ class VanillaMigrate extends Command
             }
         }
 
-        $options['--package'] = 'bishopb/vanilla-for-laravel';
+        $options['--package'] = 'bishopb/laravel-forums';
 
         $this->call('migrate', $options);
 	}

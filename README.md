@@ -43,7 +43,6 @@ Add the package service provider to your `app/config/app.php`:
     'BishopB\Forum\ForumServiceProvider',
 ),
 ```
-
 Install the migrations: `php artisan forum:migrate`  
 
 Connect Vanilla and Laravel: `php artisan forum:connect`  

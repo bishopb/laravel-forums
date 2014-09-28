@@ -74,6 +74,16 @@ class SeedBaseVanillaTables extends Migration
         $systemUserId = 0;
         $dateInserted = date('Y-m-d H:i:s');
         $theIpAddress = \Request::getClientIp();
+        $systemName   = \Config::get('mail.from.name', false);
+        $systemEmail  = \Config::get('mail.from.address', false);
+
+        // if we don't have settings from the app, fall back to what Vanilla does
+        if (empty($systemName)) {
+            $systemName = \Config::get('forum:mail.from.name', 'System');
+        }
+        if (empty($systemEmail)) {
+            $systemEmail = \Config::get('forum:mail.from.address', 'system@domain.com');
+        }
 
         return [
             /* {{{ */ 'GDN_ActivityType' => [[
@@ -453,10 +463,10 @@ class SeedBaseVanillaTables extends Migration
             ]],/* }}} */
             /* {{{ */'GDN_User' => [[
                 'UserID' => $systemUserId,
-                'Name' => \Config::get('mail.from.name'),
+                'Name' => $systemName,
                 'Password' => str_random(64),
                 'HashMethod' => 'Random',
-                'Email' => \Config::get('mail.from.address'),
+                'Email' => $systemEmail,
                 'ShowEmail' => true,
                 'DateInserted' => $dateInserted,
                 'InsertIPAddress' => $theIpAddress,

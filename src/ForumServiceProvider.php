@@ -13,7 +13,7 @@ class ForumServiceProvider extends \Illuminate\Support\ServiceProvider
 	 */
 	public function boot()
 	{
-		$this->package('bishopb/vanilla-for-laravel', 'forum', __DIR__);
+		$this->package('bishopb/laravel-forums', 'forum', __DIR__);
 
 		require_once __DIR__ . '/boot/helpers.php';
 		require_once __DIR__ . '/boot/routes.php';

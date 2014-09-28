@@ -34,6 +34,13 @@ class VanillaConnect extends Command
 	{
         $setup = new VanillaSetup();
         $setup->install();
+        $this->info(
+            'Vanilla now connected to Laravel. Try it out at ' .
+            \URL::to(forum_get_route_prefix())
+        );
+        $this->comment(
+            'If you see a NoVanillaUserMappedToGuest exception, you need to map your application users.  Refer to the README.md installation instructions.'
+        );
 	}
 
 	/**

@@ -13,10 +13,12 @@ Sound like what you need then?  Then this is your package!  We've packaged the e
   * Modify the look and feel using templates.
   * Configure the forums using the typical configuration files.
 
+**WARNING**: This package is under development and has not yet reached alpha release. [Please report issues!](https://github.com/bishopb/laravel-forums/issues).
+
 ## Requirements
 You will need:
- 1. [Laravel 4](http://laravel.com).
- 2. [MySQL 5](http://mysql.com).
+ 1. [Laravel 4.2](http://laravel.com)
+ 2. [MySQL 5.](http://mysql.com)
 
 ## Installation
 Edit your `composer.json` to include:
@@ -26,7 +28,11 @@ Edit your `composer.json` to include:
 ],
 "require": {
     "bishopb/laravel-forums": "dev-master@dev"
-}
+},
+"config": {
+    "preferred-install": "dist"
+},
+"minimum-stability": "stable"
 ```
 Run `composer update bishopb/laravel-forums`.  
 
@@ -38,9 +44,9 @@ Add the package service provider to your `app/config/app.php`:
 ),
 ```
 
-Install the migrations: `php artisan forum:migrate`
+Install the migrations: `php artisan forum:migrate`  
 
-Connect Vanilla and Laravel: `php artisan forum:connect`
+Connect Vanilla and Laravel: `php artisan forum:connect`  
 
 Navigate to the `/forum` route.  You should see an error, because Vanilla doesn't yet know about your users.  The last step is to decide and implement how your users map to Vanilla.  Read on.
 

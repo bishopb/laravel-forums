@@ -47,10 +47,12 @@ Install the migrations: `php artisan forum:migrate`
 
 Connect Vanilla and Laravel: `php artisan forum:connect`  
 
-Navigate to the `/forum` route.  You should see an error, because Vanilla doesn't yet know about your users.  The last step is to decide and implement how your users map to Vanilla.  Read on.
+Navigate to the `/forum` route.  You should see a forum with no posts, logged in as "Anonymous".  Click "New Discussion" to start a conversation.  Congratulations, you now have a basic forum to which anyone can post messages.
+
+The next step is to decide how your application users map into the forum.  Read on.
 
 ## Mapping application users to forum users
-Your application has Users.  So does Vanilla.  The two user sets are compatible, but maybe not a one-to-one mapping.  Consequently, you need to explicitly define how the two map.
+Your application has Users.  So does Vanilla, the engine powering the forums.  The two user sets are compatible, but maybe not a one-to-one mapping.  Consequently, you need to explicitly define how the two map.
 
 Laravel forums ships with three mapping strategies:
  1. One-to-one by primary key

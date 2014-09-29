@@ -32,7 +32,7 @@ class ForumServiceProvider extends \Illuminate\Support\ServiceProvider
 
         // providers
         $this->app->bind(
-            'BishopB\Forum\UserMapperInterface', 'BishopB\Forum\UserMapperById'
+            'BishopB\Forum\UserMapperInterface', 'BishopB\Forum\UserMapperAllGuestAccess'
         );
 
         // commands

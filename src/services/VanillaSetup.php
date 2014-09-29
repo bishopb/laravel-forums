@@ -14,6 +14,9 @@ class VanillaSetup
      */
     public function install()
     {
+        // create cache structure
+        $this->create_directories();
+
         // write the static configuration file
         $this->write_config_file();
 
@@ -38,7 +41,7 @@ class VanillaSetup
     }
 
     /**
-     * Return an array of all files affected by this setup.
+     * Return an array of all Vanilla files affected by this setup.
      */
     public function affected_files()
     {
@@ -48,6 +51,19 @@ class VanillaSetup
             'bootstrap.before' => $base . '/conf/bootstrap.before.php',
             'bootstrap.early'  => $base . '/conf/bootstrap.early.php',
         ];
+    }
+
+    /**
+     * Create any needed directories.
+     */
+    protected function create_directories()
+    {
+        $paths = [
+            storage_path() . '/cache/Smarty',
+            storage_path() . '/cache/Smarty/cache',
+            storage_path() . '/cache/Smarty/compile',
+        ];
+        array_map('mkdir', $paths);
     }
 
     /**

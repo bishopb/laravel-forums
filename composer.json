@@ -17,6 +17,7 @@
         "felixkiss/uniquewith-validator": "1.1.*"
     },
     "autoload": {
+        "classmap": [ "src" ],
         "psr-4": {
             "BishopB\\Forum\\": "src/"
         }

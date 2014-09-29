@@ -9,7 +9,9 @@ trait AuditingTrait
 {
     static public function bootAuditingTrait()
     {
-        static::observe(new AuditingObserver());
+        static::observe(
+            new AuditingObserver(\App::make('auth'), \App::make('request'))
+        );
     }
 
     /**

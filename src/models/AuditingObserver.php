@@ -7,78 +7,91 @@ namespace BishopB\Forum;
  */
 class AuditingObserver
 {
-    /**
-     * Register the validation event for creating the model.
-     *
-     * @param  \Illuminate\Database\Eloquent\Model $model
-     * @return boolean
-     */
-    public function creating(\Illuminate\Database\Eloquent\Model $model)
+    public function __construct(
+        \Illuminate\Auth\AuthManager $auth, \Illuminate\Http\Request $request
+    )
     {
-        // insert specific...
-        if ($this->needs($model, 'InsertUserID')) {
-            $model->InsertUserID = \Auth::user()->getKey();
-        }
-        if ($this->needs($model, 'DateInserted')) {
-            $model->DateInserted = $this->getNow();
-        }
-        if ($this->needs($model, 'InsertIPAddress')) {
-            $model->InsertIPAddress = \Request::getClientIp();
-        }
-
-        // ... now fill in the update too with identical values
-        $this->updating($model);
+        $this->auth    = $auth;
+        $this->request = $request;
     }
 
     /**
-     * Register the validation event for updating the model.
+     * Register the creating event for creating the model.
      *
-     * @param  \Illuminate\Database\Eloquent\Model $model
-     * @return boolean
+     * @param \Illuminate\Database\Eloquent\Model $model
+     */
+    public function creating(\Illuminate\Database\Eloquent\Model $model)
+    {
+        if ($this->needs($model, 'InsertUserID')) {
+            $model->InsertUserID = $this->auth->user()->getKey();
+            if ($this->needs($model, 'UpdateUserID')) {
+                $model->UpdateUserID = $model->InsertUserID;
+            }
+        }
+        if ($this->needs($model, 'DateInserted')) {
+            $model->DateInserted = date('Y-m-d H:i:s');
+            if ($this->needs($model, 'DateUpdated')) {
+                $model->DateUpdated = $model->DateInserted;
+            }
+        }
+        if ($this->needs($model, 'InsertIPAddress')) {
+            $model->InsertIPAddress = $this->request->getClientIp();
+            if ($this->needs($model, 'UpdateIPAddress')) {
+                $model->UpdateIPAddress = $model->InsertIPAddress;
+            }
+        }
+    }
+
+    /**
+     * Register the updating event for updating the model.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
      */
     public function updating(\Illuminate\Database\Eloquent\Model $model)
     {
         if ($this->needs($model, 'UpdateUserID')) {
-            $model->UpdateUserID = \Auth::user()->getKey();
+            $model->UpdateUserID = $this->auth->user()->getKey();
         }
         if ($this->needs($model, 'DateUpdated')) {
-            $model->DateUpdated = $this->getNow();
+            $model->DateUpdated = date('Y-m-d H:i:s');
         }
         if ($this->needs($model, 'UpdateIPAddress')) {
-            $model->UpdateIPAddress = \Request::getClientIp();
+            $model->UpdateIPAddress = $this->request->getClientIp();
+        }
+    }
+
+    /**
+     * Register the deleting event for deleting the model.
+     *
+     * @param \Illuminate\Database\Eloquent\Model $model
+     */
+    public function deleting(\Illuminate\Database\Eloquent\Model $model)
+    {
+        if ($this->needs($model, 'DeleteUserID')) {
+            $model->DeleteUserID = $this->auth->user()->getKey();
+        }
+        if ($this->needs($model, 'DateDeleted')) {
+            $model->DateDeleted = date('Y-m-d H:i:s');
         }
     }
 
     // PROTECTED API
 
     /**
-     * Test for the presence of a given auditing column in the attribute data.
+     * Test whether a particular auditing attribute is needed.
      *
-     * @param array $model
+     * @param \Illuminate\Database\Eloquent\Model $model
      * @param string $attribute
      */
-    protected function needs(\Eloquent $model, $attribute)
+    protected function needs(\Illuminate\Database\Eloquent\Model $model, $attribute)
     {
         return (
             (
                 in_array($attribute, $model->getAuditors()) && // audit column in model &
-                empty($model->getAttribute($attribute))        // column not already set
+                ! $model->getAttribute($attribute)             // column not already set
             ) ?
             true :
             false
         );
-    }
-
-    /**
-     * Get the current time.
-     */
-    protected function getNow()
-    {
-        static $now = null;
-        if (null === $now) {
-            $now = new \DateTime();
-        }
-
-        return $now;
     }
 }

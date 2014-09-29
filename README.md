@@ -34,7 +34,7 @@ Edit your `composer.json` to include:
 },
 "minimum-stability": "dev"
 ```
-Run `composer update bishopb/laravel-forums`.  
+Run `composer update bishopb/laravel-forums --no-dev`.  
 
 Add the package service provider to your `app/config/app.php`:
 ```php

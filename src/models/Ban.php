@@ -2,7 +2,7 @@
 
 namespace BishopB\Forum;
 
-class Activity extends BaseModel
+class Ban extends BaseModel
 {
     // validation
     protected $rules = [

@@ -42,17 +42,16 @@ class VanillaRunner
                     case 'gif': $ct = 'image/gif'; break;
                     default:    $ct = 'text/plain'; break;
                 }
-                header("Content-Type: $ct");
-                readfile($target);
-                return;
+                return \Response::
+                    make(\File::get($target))->
+                    header('Content-Type', $ct)
+                ;
             }
         }
 
         // otherwise, dispatch into vanilla
         $user = $this->user;
         VanillaBootstrap::call(function () use ($user, $segments) {
-            define('TIME_TO_DIE', true);
-
             // Create the session and stuff the user in
             \Gdn::Authenticator()->SetIdentity($user->getKey(), false /* no persist */);
             \Gdn::Session()->Start(false /* use set identity */, false /* no persist */);

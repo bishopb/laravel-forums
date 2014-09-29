@@ -29,6 +29,7 @@ class VanillaAdapter
         $this->adapt_db();
         $this->adapt_request();
         $this->adapt_pluginmanager();
+        $this->adapt_config();
     }
 
     /**
@@ -94,5 +95,23 @@ class VanillaAdapter
         \Gdn::FactoryInstall(
             \Gdn::AliasPluginManager, '\BishopB\Forum\GardenPluginManager'
         );
+    }
+
+    /**
+     * Inject configuration values.
+     */
+    public function adapt_config()
+    {
+        $map = [
+            'forum::forum.title'              => 'Garden.Title',
+            'forum::forum.default-controller' => 'Routes.DefaultController',
+            'mail.from.address'               => 'Garden.Email.SupportAddress',
+            'mail.from.name'                  => 'Garden.Email.SupportName',
+        ];
+        foreach ($map as $ours => $theirs) {
+            if (\Config::get($ours, false)) {
+                $this->set($theirs, \Config::get($ours));
+            }
+        }
     }
 }

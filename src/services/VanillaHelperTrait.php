@@ -20,7 +20,7 @@ trait VanillaHelperTrait
      */
     public static function set($key, $value)
     {
-        \Gdn::Config()->Set($key, $value, true /*overwrite*/, false /*dont persist*/);
+        \Gdn::Config()->Set($key, $value, true /*overwrite*/, true /*persist*/);
     }
 
     /**

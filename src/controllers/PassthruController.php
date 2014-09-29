@@ -34,6 +34,6 @@ class PassthruController extends \Controller
         // run vanilla with the path and user we want
         $runner = new VanillaRunner();
         $runner->login($this->mapper->current());
-        $runner->view($segments);
+        return $runner->view($segments);
     }
 }

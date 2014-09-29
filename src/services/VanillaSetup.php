@@ -63,7 +63,19 @@ class VanillaSetup
             storage_path() . '/cache/Smarty/cache',
             storage_path() . '/cache/Smarty/compile',
         ];
-        array_map('mkdir', $paths);
+        array_map(
+            function ($path) {
+                if (! file_exists($path)) {
+                    $ok = mkdir($path, 0777);
+                    if (! $ok) {
+                        throw new VanillaForumsSetupException(
+                            'Cannot create required directory: ' . $path
+                        );
+                    }
+                }
+            },
+            $paths
+        );
     }
 
     /**

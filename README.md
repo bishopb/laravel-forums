@@ -71,7 +71,7 @@ function create_an_app_user() {
     $user = UserRepository::createWithRoles(
         [
             'Name' => 'Jane Q. Doe',
-            'Password' => User::crypt_password(str_random(64), 'vanilla'),
+            'Password' => User::crypt_password('the-initial-password', 'vanilla'),
             'HashMethod' => 'vanilla',
         ],
         [ RoleRepository::member(), RoleRepository::moderator() ]

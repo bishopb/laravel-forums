@@ -17,6 +17,8 @@ class ForumServiceProvider extends \Illuminate\Support\ServiceProvider
 
 		require_once __DIR__ . '/boot/helpers.php';
 		require_once __DIR__ . '/boot/routes.php';
+
+        $this->commands('forum::commands.migrate', 'forum::commands.connect');
 	}
 
 	/**
@@ -42,8 +44,6 @@ class ForumServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app['forum::commands.connect'] = $this->app->share(function ($app) {
             return new VanillaConnect();
         });
-
-        $this->commands('forum::commands.migrate', 'forum::commands.connect');
 	}
 
 	/**

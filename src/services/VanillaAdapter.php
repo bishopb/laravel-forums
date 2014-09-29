@@ -29,6 +29,7 @@ class VanillaAdapter
         $this->adapt_db();
         $this->adapt_request();
         $this->adapt_pluginmanager();
+        $this->adapt_smarty();
         $this->adapt_config();
     }
 
@@ -95,6 +96,15 @@ class VanillaAdapter
         \Gdn::FactoryInstall(
             \Gdn::AliasPluginManager, '\BishopB\Forum\GardenPluginManager'
         );
+    }
+
+    /**
+     * Hook ourselves into Vanilla's Smarty.
+     * PS: Smarty sux ;)
+     */
+    public function adapt_smarty()
+    {
+        \Gdn::FactoryInstall('ViewHandler.tpl', '\BishopB\Forum\GardenSmarty');
     }
 
     /**

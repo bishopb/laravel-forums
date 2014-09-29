@@ -17,3 +17,12 @@ if (\Config::get('forum::package.trace', false)) {
         call_user_func(['Log', $level], $value);
     }
 }
+
+/**
+ * When Garden throws an exception, come back to here and show it in
+ * Laravel.
+ */
+function LogException(\Exception $ex)
+{
+    echo \App::make('exception')->handleException($ex);
+}

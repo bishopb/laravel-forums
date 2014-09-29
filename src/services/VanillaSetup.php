@@ -10,7 +10,10 @@ class VanillaSetup
     use VanillaHelperTrait;
 
     /**
-     * Convince Vanilla it's installed.
+     * Convince Vanilla it's installed.  This writes out static code and config,
+     * some of which will be overwritten at run-time to reflect the latest
+     * values.  We have to write these out statically to convince Vanilla
+     * it's installed.
      */
     public function install()
     {
@@ -148,6 +151,7 @@ class VanillaSetup
     /**
      * Write out the constants.
      */
+    /*
     protected function write_constants_file()
     {
         $constants = [
@@ -163,4 +167,5 @@ class VanillaSetup
 
         $this->write_file($this->affected_files()['bootstrap.before'], $text);
     }
+     */
 }

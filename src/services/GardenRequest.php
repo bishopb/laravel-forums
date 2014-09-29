@@ -10,7 +10,7 @@ class GardenRequest extends \Gdn_Request
     /**
      * We specifically always want our web root inside our route.
      */
-    public function WebRoot()
+    public function WebRoot($WebRoot = NULL)
     {
         return forum_get_route_prefix();
     }

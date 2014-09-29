@@ -51,7 +51,9 @@ class VanillaRunner
 
         // otherwise, dispatch into vanilla
         $user = $this->user;
-        VanillaBootstrap::call(function () use ($user, $segments) {
+
+        $bootstrap = new VanillaBootstrap();
+        $bootstrap->call(function () use ($user, $segments) {
             // Create the session and stuff the user in
             \Gdn::Authenticator()->SetIdentity($user->getKey(), false /* no persist */);
             \Gdn::Session()->Start(false /* use set identity */, false /* no persist */);

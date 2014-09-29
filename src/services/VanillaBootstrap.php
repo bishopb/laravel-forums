@@ -14,7 +14,7 @@ class VanillaBootstrap
      * 
      * Much of this ripped out of Vanilla's index.php
      */
-    public static function call(callable $callback)
+    public function call(callable $callback)
     {
         // Vanilla and Laravel share some common global functions, like `url`
         // and `asset`.  Laravel's defintion won, so now we need to override
@@ -35,20 +35,13 @@ class VanillaBootstrap
         );
 
         // define the constants we need to get going
-        $constants = [
-            'APPLICATION'         => 'Vanilla',
-            'APPLICATION_VERSION' => self::get_vanilla_version(),
-            'DS'                  => '/',
-            'PATH_ROOT'           => self::get_vanilla_path(),
-        ];
-        foreach ($constants as $key => $val) {
-            if (! defined($key)) {
-                define($key, $val);
-            }
-        }
+        $this->define_constants();
 
         // alright, boot it up
         require_once(PATH_ROOT . '/bootstrap.php');
+
+        // recover Laravel error handling
+        \App::getFacadeRoot()->startExceptionHandling();
 
         // do the requested work
         call_user_func($callback);
@@ -56,5 +49,31 @@ class VanillaBootstrap
         // restore our environment as much as possible
         \App::bind('url', $old_url);
         error_reporting($old_error_reporting);
+    }
+
+    protected function define_constants()
+    {
+        $global_theme_path = __DIR__ . '/../views/themes';
+        $local_theme_path  = app_path() . '/views/packages/bishopb/laravel-forums/themes';
+
+        $constants = [
+            'APPLICATION'         => 'Vanilla',
+            'APPLICATION_VERSION' => $this->get_vanilla_version(),
+            'DS'                  => '/',
+            'PATH_ROOT'           => $this->get_vanilla_path(),
+            'PATH_CACHE'          => storage_path() . '/cache',
+            'PATH_THEMES'         => (
+                file_exists($local_theme_path) ?
+                $local_theme_path :
+                $global_theme_path
+            ),
+            'PATH_UPLOADS'        => \Config::get('forum::paths.uploads'),
+        ];
+
+        foreach ($constants as $key => $val) {
+            if (! defined($key)) {
+                define($key, $val);
+            }
+        }
     }
 }

@@ -24,10 +24,16 @@ class VanillaRunner
     public function view($segments)
     {
         // if the segments point to an extant file, serve it up directly
-        $implode = implode('/', $segments);
+        $implode = '/'. implode('/', $segments);
         $targets = [
-            dirname(__DIR__) . '/views/' . $implode,    // a theme file?
-            $this->get_vanilla_path() . '/' . $implode, // a Vanilla resource?
+            // a theme file?
+            dirname(__DIR__) . '/views' . $implode,
+
+            // a Vanilla resource?
+            $this->get_vanilla_path() . $implode,
+
+            // an upload?
+            dirname(\Config::get('forum::paths.uploads')) . $implode,
         ];
         foreach ($targets as $target) {
             if (is_readable($target)) {

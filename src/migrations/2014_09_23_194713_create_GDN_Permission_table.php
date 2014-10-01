@@ -5,20 +5,20 @@ use Illuminate\Database\Schema\Blueprint;
 
 class CreateGDNPermissionTable extends Migration {
 
-	/**
-	 * Run the migrations.
-	 *
-	 * @return void
-	 */
-	public function up()
-	{
-		Schema::create('GDN_Permission', function(Blueprint $table)
-		{
-			$table->integer('PermissionID', true);
-			$table->integer('RoleID')->default(0)->index('FK_Permission_RoleID');
-			$table->string('JunctionTable', 100)->nullable();
-			$table->string('JunctionColumn', 100)->nullable();
-			$table->integer('JunctionID')->nullable();
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('GDN_Permission', function(Blueprint $table)
+        {
+            $table->integer('PermissionID', true);
+            $table->integer('RoleID')->default(0)->index('FK_Permission_RoleID');
+            $table->string('JunctionTable', 100)->nullable();
+            $table->string('JunctionColumn', 100)->nullable();
+            $table->integer('JunctionID')->nullable();
             // Vanilla may add these on the fly:
             // got to love dynamic schema!
             $table->boolean(DB::raw('`Garden.Email.View`'))->default(0);
@@ -52,18 +52,18 @@ class CreateGDNPermissionTable extends Migration {
             $table->boolean(DB::raw('`Vanilla.Comments.Add`'))->default(0);
             $table->boolean(DB::raw('`Vanilla.Comments.Edit`'))->default(0);
             $table->boolean(DB::raw('`Vanilla.Comments.Delete`'))->default(0);
-		});
-	}
+        });
+    }
 
 
-	/**
-	 * Reverse the migrations.
-	 *
-	 * @return void
-	 */
-	public function down()
-	{
-		Schema::drop('GDN_Permission');
-	}
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('GDN_Permission');
+    }
 
 }

@@ -23,36 +23,13 @@ class VanillaRunner
      */
     public function view($segments)
     {
-        // if the segments point to an extant file, serve it up directly
-        $implode = '/'. implode('/', $segments);
-        $targets = [
-            // a theme file?
-            dirname(__DIR__) . '/views' . $implode,
-
-            // a Vanilla resource?
-            $this->get_vanilla_path() . $implode,
-
-            // an upload?
-            dirname(\Config::get('forum::paths.uploads')) . $implode,
-        ];
-        foreach ($targets as $target) {
-            if (is_readable($target)) {
-                // TODO: Replace this with a dead simple library
-                // TODO: googling "github php mimetype to file extension returns heavy projects
-                // @see http://stackoverflow.com/questions/19681854
-                switch (pathinfo($target, PATHINFO_EXTENSION)) {
-                    case 'js' : $ct = 'text/javascript'; break;
-                    case 'css': $ct = 'text/css'; break;
-                    case 'png': $ct = 'image/png'; break;
-                    case 'jpg': $ct = 'image/jpg'; break;
-                    case 'gif': $ct = 'image/gif'; break;
-                    default:    $ct = 'text/plain'; break;
-                }
-                return \Response::
-                    make(\File::get($target))->
-                    header('Content-Type', $ct)
-                ;
-            }
+        // if a static asset, return it outright
+        $asset = $this->is_static_asset($segments);
+        if ($asset) {
+            return \Response::
+                make(\File::get($asset))->
+                header('Content-Type', $this->get_content_type($asset))
+            ;
         }
 
         // otherwise, dispatch into vanilla
@@ -76,5 +53,55 @@ class VanillaRunner
             $Dispatcher->Start();
             $Dispatcher->Dispatch(implode('/', $segments));
         });
+    }
+
+    /**
+     * Determine if these segments refer to a static, on disk asset and, 
+     * if so, return the path to it.
+     *
+     * @param array $segments
+     * @return mixed
+     */
+    protected function is_static_asset(array $segments)
+    {
+        // enumerate the possible targets
+        $implode = '/'. implode('/', $segments);
+        $targets = [
+            // a theme file published to the app?
+            app_path() . '/views/packages/bishopb/laravel-forums' . $implode,
+
+            // a theme file in this package?
+            dirname(__DIR__) . '/views' . $implode,
+
+            // a Vanilla resource?
+            $this->get_vanilla_path() . $implode,
+
+            // an upload?
+            dirname(\Config::get('forum::paths.uploads')) . $implode,
+        ];
+
+        foreach ($targets as $target) {
+            if (is_readable($target)) {
+                return $target;
+            }
+        }
+    }
+
+    /**
+     * Get the content type of the target.
+     * TODO: Replace this with a dead simple library
+     * TODO: googling "github php mimetype to file extension returns heavy projects
+     * @see http://stackoverflow.com/questions/19681854
+     */
+    protected function get_content_type($target)
+    {
+        switch (pathinfo($target, PATHINFO_EXTENSION)) {
+            case 'js' : return 'text/javascript';
+            case 'css': return 'text/css';
+            case 'png': return 'image/png';
+            case 'jpg': return 'image/jpg';
+            case 'gif': return 'image/gif';
+            default:    return 'text/plain';
+        }
     }
 }

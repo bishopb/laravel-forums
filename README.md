@@ -23,16 +23,9 @@ You will need:
 ## Installation
 Edit your `composer.json` to include:
 ```json
-"repositories": [
-    { "type": "vcs", "url": "https://github.com/vanilla/vanilla" }
-],
 "require": {
-    "bishopb/laravel-forums": "dev-master@dev"
+    "bishopb/laravel-forums": "~0.1"
 },
-"config": {
-    "preferred-install": "dist"
-},
-"minimum-stability": "dev"
 ```
 Run `composer update bishopb/laravel-forums --no-dev`.  
 

@@ -8,7 +8,7 @@
         }
     ],
     "require": {
-        "bishopb/vanilla": "~2.2",
+        "bishopb/vanilla": "2.2.*",
         "laravel/framework": "~4.2",
         "vanilla/vanilla": "dev-master@dev",
         "watson/validating": "0.10.*",

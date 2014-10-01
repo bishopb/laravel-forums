@@ -23,9 +23,6 @@ class VanillaSetup
         // write the static configuration file
         $this->write_config_file();
 
-        // write the static constants file
-        $this->write_constants_file();
-
         // arrange for Vanilla to call on our code at runtime
         $this->write_file(
             $this->affected_files()['bootstrap.early'],
@@ -147,25 +144,4 @@ class VanillaSetup
             throw new VanillaForumsSetupException('Could not install file ' . $path);
         }
     }
-
-    /**
-     * Write out the constants.
-     */
-    /*
-    protected function write_constants_file()
-    {
-        $constants = [
-            'PATH_CACHE' => storage_path() . '/cache',
-            'PATH_THEMES' => dirname(__DIR__) . '/views/themes',
-            'PATH_UPLOADS' => \Config::get('forum::paths.uploads'),
-        ];
-
-        $text = '<?php' . "\n";
-        foreach ($constants as $key => $val) {
-            $text .= sprintf("define('%s', %s);\n", $key, var_export($val, true));
-        }
-
-        $this->write_file($this->affected_files()['bootstrap.before'], $text);
-    }
-     */
 }

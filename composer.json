@@ -8,7 +8,7 @@
         }
     ],
     "require": {
-        "bishopb/vanilla": "2.2.3.6",
+        "bishopb/vanilla": "2.2.3.6-patch1",
         "laravel/framework": "~4.2",
         "watson/validating": "0.10.*",
         "felixkiss/uniquewith-validator": "1.1.*"
